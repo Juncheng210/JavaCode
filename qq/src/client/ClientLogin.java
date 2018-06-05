@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.ObjectOutputStream;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -14,12 +15,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
-public class ClientLogin extends JFrame {
+public class ClientLogin extends JFrame implements ActionListener {
+	private static final long serialVersionUID = 1L;
 	//定义上面的组件
 	JLabel jbl1;
 	JButton close;
@@ -49,11 +52,6 @@ public class ClientLogin extends JFrame {
 		close = new JButton(img);
 		close.setBounds(394, 0, 20, 20);
 		close.setBorderPainted(false);
-		close.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
 		close.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -168,5 +166,54 @@ public class ClientLogin extends JFrame {
 		this.setIconImage(new ImageIcon("src/images/logo.png").getImage());
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//如果用户点击登录
+		if(e.getSource()==jp1_jb1)
+		{
+			User user = new User();
+			user.setUserId(jp2_jtf.getText().trim());  //trim是出去开始或结尾的空格
+			user.setPasswd(new String(jp2_jpf.getPassword()));
+			
+			if(this.checkUser(user))
+			{
+				try {
+					//把创建语句提前
+					FriendList qqList = new FriendList(user.getUserId());
+					ManageFriendList.addFriendList(user.getUserId(), qqList);
+					
+					//发送一个要求在线好友的请求包
+					ObjectOutputStream oos=new ObjectOutputStream(ManageClientConServerThread.getClientConServerTherad(user.getUserId()).getSocket().getOutputStream());
+					
+					//做一个Message
+					Message m = new Message();
+					m.setMesType(MessageQqType.MESSAGE_GET_ONLINE_FRIEND);
+					//指明我要的qq号的好友的情况
+					m.setSender(user.getUserId());
+					oos.writeObject(m);	
+				} catch (Exception ex) {
+					// TODO: handle exception
+					ex.printStackTrace();
+				}
+			//	new QqFriendList(u.getUserId());
+				//关闭掉登录界面
+				this.dispose();
+			}else{
+				JOptionPane.showMessageDialog(this, "用户名密码错误");
+			}
+		}
+	}
+	/**
+	 * @Title: checkUser  
+	 * @Description: 检查密码是否正确
+	 * @param @param u
+	 * @param @return    参数  
+	 * @return boolean    返回类型
+	 */
+	public boolean checkUser(User user)
+	{
+		return new ConnectServer().sendLoginInfoToServer(user);
 	}
 }
