@@ -1,0 +1,17 @@
+package day0530.homework;
+
+import java.util.Scanner;
+
+public class Test {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while(true) {
+			System.out.print("ÇëÊäÈëÄÚÈİ£º");
+			String s = sc.next();
+			System.out.println(s);
+			String s1 = sc.next();
+			System.out.println(s1);
+		}
+	}
+}

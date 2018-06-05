@@ -1,0 +1,17 @@
+package day0531;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+
+public class SocketTest {
+	public static void main(String[] args) {
+		try {
+			ServerSocket server = new ServerSocket(7890);
+			System.out.println("服务器启动");
+			server.accept();
+			System.out.println("有客户端连接");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

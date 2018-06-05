@@ -1,0 +1,46 @@
+package day0601;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class ClientUpdateFile {
+	public static void main(String[] args) {
+		Socket socket = null;
+		FileInputStream fis = null;
+		try {
+			socket = new Socket("127.0.0.1", 8888);
+			//获取字节输出流，将图片写到服务器
+			OutputStream os = socket.getOutputStream();
+			//创建字节输入流，服务本机文件
+			fis = new FileInputStream("D:/test/a/111.jpg");
+			//开始读写字节数组
+			int len = -1;
+			byte[] buff = new byte[1024];
+			while((len=fis.read(buff)) != -1) {
+				os.write(buff, 0, len);
+			}
+			//给服务器写终止序列
+			socket.shutdownOutput();
+			
+			//获取字节输入流，读取服务器反馈
+			InputStream is = socket.getInputStream();
+			len = is.read(buff);
+			System.out.println(new String(buff, 0, len));
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				fis.close();
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

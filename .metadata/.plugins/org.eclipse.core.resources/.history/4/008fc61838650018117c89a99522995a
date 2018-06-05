@@ -1,0 +1,24 @@
+package day0601;
+
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class ClientUpdateFile {
+	public static void main(String[] args) {
+		Socket socket = null;
+		try {
+			socket = new Socket("127.0.0.1", 8888);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

@@ -1,0 +1,52 @@
+package day0530.homework;
+
+import java.util.Scanner;
+
+public class XMLDemoTest {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("添加用户：【a】	删除用户：【b】	查询成绩：【c】");
+		System.out.print("请输入操作类型：");
+		
+		String filepath = "src/day0530/homework/exam1.xml";
+		
+		while(true) {
+			String input = sc.next();
+			if(input.equals("a") || input.equals("A")) {
+				XMLDemo.addUserMsg(filepath);
+				System.out.println("还需要继续操作吗？（确认请输入“Y”,否则输入其它字母）：");
+				while(true) {
+					String in = sc.next();
+					if(in.equals("Y") || in.equals("y")) {
+						break;
+					}
+					return;
+				}
+			} else if(input.equals("b") || input.equals("B")) {
+				XMLDemo.deleteUserMsg(filepath);
+				System.out.println("还需要继续操作吗？（确认请输入“Y”,否则输入其它字母）：");
+				while(true) {
+					String in = sc.next();
+					if(in.equals("Y") || in.equals("y")) {
+						break;
+					}
+					return;
+				}
+			} else if(input.equals("c") || input.equals("C")) {
+				XMLDemo.queryUserMsg(filepath);
+				System.out.println("还需要继续操作吗？（确认请输入“Y”,否则输入其它字母）：");
+				while(true) {
+					String in = sc.next();
+					if(in.equals("Y") || in.equals("y")) {
+						break;
+					}
+					return;
+				}
+			} else {
+				System.out.print("请输入方括号中的单个字母：");
+				continue;
+			}
+		}
+		sc.close();
+	}
+}

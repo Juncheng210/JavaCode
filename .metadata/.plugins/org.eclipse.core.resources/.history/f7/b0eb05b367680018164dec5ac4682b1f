@@ -1,0 +1,12 @@
+package day0605;
+
+import java.awt.Frame;
+
+public class KeyTest {
+	public static void main(String[] args) {
+		Frame f = new Frame("¼üÅÌÊÂ¼ş¼àÌı");
+		f.setSize(400, 300);
+		f.setLocationRelativeTo(null);
+		f.setVisible(true);
+	}
+}

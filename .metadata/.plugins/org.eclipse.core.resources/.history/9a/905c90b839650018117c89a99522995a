@@ -1,0 +1,27 @@
+package day0601;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerReceiveFile {
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		Socket socket = null;
+		try {
+			server = new ServerSocket(8888);
+			socket = server.accept();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<exam>
+	
+	
+	
+	
+	<student idcard="123" examid="456">		<name>zs</name>
+		<location>cd</location>
+		<grade>78</grade>
+	</student>
+</exam>

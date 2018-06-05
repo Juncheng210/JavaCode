@@ -1,0 +1,20 @@
+package day0604;
+
+import java.awt.Button;
+import java.awt.Frame;
+
+public class TestGUI2 {
+	Frame frame;
+	Button btn1,btn2;
+	
+	public static void main(String[] args) {
+		TestGUI2 test = new TestGUI2();
+	}
+	
+	public TestGUI2() {
+		frame = new Frame("QQµÇÂ¼");
+		frame.setBounds(300, 300, 400, 250);
+		frame.setResizable(false);
+		frame.setVisible(true);
+	}
+}

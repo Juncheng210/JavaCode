@@ -1,0 +1,62 @@
+package day0528;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+
+public class CopyFileThread implements Runnable{
+	private int block;
+    private int blockNum;
+    private String startFileUrl;
+    private String endFileUrl;
+    
+	public CopyFileThread(int block, int blockNum, String startFileUrl, String endFileUrl) {
+		this.block = block;
+		this.blockNum = blockNum;
+		this.startFileUrl = startFileUrl;
+		this.endFileUrl = endFileUrl;
+	}
+
+	@Override
+	public void run() {
+		try {
+            RandomAccessFile raf =  new RandomAccessFile(startFileUrl,"r");
+            RandomAccessFile raf2 =  new RandomAccessFile(endFileUrl,"rw");
+            
+            //源文件大小
+            long size = raf.length();
+            //每一块的大小
+            long blockSize = size / block;
+            //开始的位置
+            long startPos = blockNum * blockSize;
+            
+            //缓冲区
+            byte[] buff = new byte[1024];
+            int len = raf.read(buff);
+            long length = 0;
+            
+            //跳到需要读取的位置  
+            raf.seek(startPos);
+            raf2.seek(startPos+1);
+            
+            while( len != -1 ) {
+            	length += len;
+				if(length <= blockSize) {
+					raf2.write(buff, 0, len);
+					len = raf.read(buff);
+				} else {
+					raf2.write(buff, 0, (int)(buff.length-(length-blockSize)));
+					break;
+				}
+               
+            }
+            
+            raf2.close();
+            raf.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+	}
+}

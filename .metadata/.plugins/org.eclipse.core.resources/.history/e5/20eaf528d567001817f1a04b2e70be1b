@@ -1,0 +1,15 @@
+package day0604;
+
+import java.awt.Cursor;
+import java.awt.Frame;
+
+import javax.swing.ImageIcon;
+
+public class TestGUI {
+	public static void main(String[] args) {
+		Frame f = new Frame("GUIÑÝÊ¾");
+		f.setBounds(200, 200, 300, 200);
+		f.setIconImage(new ImageIcon("src/day0604/qq.png").getImage());
+		f.setVisible(true);
+	}
+}

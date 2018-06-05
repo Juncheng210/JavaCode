@@ -1,0 +1,17 @@
+package day0530;
+
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
+import org.xml.sax.SAXException;
+
+public class Test {
+	public static void main(String[] args) {
+		try {
+			SAXReader read = new SAXReader();
+			read.read("src/day0530/class.xml");
+			System.out.println(read.getEncoding());
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+	}
+}

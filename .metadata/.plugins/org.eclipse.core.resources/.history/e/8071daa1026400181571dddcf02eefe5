@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<exam>
+	<student idcard="1111" examid="2222">
+		<name>s</name>
+		<location>cdd</location>
+		<grade>89</grade>
+	</student>
+	<student idcard="222" examid="2222">
+		<name>s</name>
+		<location>cdd</location>
+		<grade>89</grade>
+	</student>
+	<student idcard="1122211" examid="2222">
+		<name>s</name>
+		<location>cdd</location>
+		<grade>89</grade>
+	</student>
+</exam>

@@ -1,0 +1,69 @@
+package day0604;
+
+import java.awt.GridLayout;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+public class TestGUI3 extends JFrame {
+	JPanel jp1,jp2,jp3;
+	JLabel jlb1,jlb2;
+	JButton jb1,jb2;
+	JTextField jtf1;
+	JPasswordField jpf1;
+	
+	public static void main(String[] args) {
+		new TestGUI3();
+	}
+	
+	public TestGUI3() {
+		//创建组件
+		jp1 = new JPanel();
+		jp2 = new JPanel();
+		jp3 = new JPanel();
+		
+		jlb1 = new JLabel("用户名");
+		jlb2 = new JLabel("密    码");
+		jb1 = new JButton("登录");
+		jb2 = new JButton("注册");
+		
+		jtf1 = new JTextField(10);
+		jpf1 = new JPasswordField(10);
+		
+		//设置布局管理器
+		this.setLayout(new GridLayout(3, 1));
+		
+		//加入组件
+		jp1.add(jlb1);
+		jp1.add(jtf1);
+		
+		jp2.add(jlb2);
+		jp2.add(jpf1);
+		
+		jp3.add(jb1);
+		jp3.add(jb2);
+		
+		//加入到JFrame
+		this.add(jp1);
+		this.add(jp2);
+		this.add(jp3);
+		
+		//设置窗口属性
+		this.setTitle("QQ登录");
+		this.setSize(300, 150);
+		this.setLocation(200, 200);
+		this.setIconImage(new ImageIcon("src/day0604/qq.png").getImage());
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		//禁止用户改变窗口大小
+		this.setResizable(false);
+		
+		//显示窗口
+		this.setVisible(true);
+	}
+}

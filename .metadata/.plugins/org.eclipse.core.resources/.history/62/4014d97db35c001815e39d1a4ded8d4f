@@ -1,0 +1,47 @@
+package day0521;
+
+import java.io.File;
+
+public class Test {
+	private static long sum;
+	
+	public static void main(String[] args) {
+		String s = "D:\\test";
+		System.out.println(getDirSize(s));
+		
+		//1.打印一个目录下所有的图片文件的绝对路径。
+		String ss = "D:\\";
+		getImgPath(ss);
+		
+		//2.统计一个目录的大小
+	}
+	
+	public static long getDirSize(String dir) {
+		File f = new File(dir);
+		File[] file = f.listFiles();
+
+		for(File file2 : file) {
+			if(file2.isDirectory()) {
+				getDirSize(file2.getPath());
+			}else {
+				sum += file2.length();
+			}
+		}
+		return sum;
+	}
+	
+	public static void getImgPath(String dir) {
+		File f = new File(dir);
+		File[] file = f.listFiles();
+		for(File f1 : file) {
+			if(f1.isDirectory()) {
+				getImgPath(dir);
+			} else {
+				String[] ss1 = f1.getPath().split("\\.");
+				if(ss1[ss1.length-1].equals("jpg")) {
+					System.out.println(f1.getPath());
+				}
+			}
+		}
+	}
+}

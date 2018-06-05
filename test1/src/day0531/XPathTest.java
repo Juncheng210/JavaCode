@@ -1,0 +1,23 @@
+package day0531;
+
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+public class XPathTest {
+	public static void main(String[] args) {
+		SAXReader sax = new SAXReader();
+		try {
+			Document doc = sax.read("src/day0531/exam1.xml");
+			List<Element> list = doc.selectNodes("//student[grade=97]//name");
+			for (Element ele : list) {
+				System.out.println(ele.getText());
+			}
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+	}
+}

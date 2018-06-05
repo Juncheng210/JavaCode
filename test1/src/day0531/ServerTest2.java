@@ -1,0 +1,34 @@
+package day0531;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class ServerTest2 {
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		BufferedOutputStream bos = null;
+		try {
+			server = new ServerSocket(7890);
+			Socket s = server.accept();
+			System.out.println("有客户端连接");
+			
+			bos = new BufferedOutputStream(s.getOutputStream());
+			bos.write("向客户端发送信息".getBytes());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				bos.close();
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

@@ -1,0 +1,15 @@
+package day0601;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+
+public class ServerDemo {
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		try {
+			server = new ServerSocket(8888);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}

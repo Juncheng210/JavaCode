@@ -1,0 +1,34 @@
+package day0601;
+
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class ClientUpdateFile {
+	public static void main(String[] args) {
+		Socket socket = null;
+		try {
+			socket = new Socket("127.0.0.1", 8888);
+			OutputStream os = socket.getOutputStream();
+			FileInputStream fis = new FileInputStream("D:/test/a/111.jpg");
+			int len = -1;
+			byte[] buff = new byte[1024];
+			while((len=fis.read(buff)) != -1) {
+				os.write(buff, 0, len);
+			}
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

@@ -1,0 +1,26 @@
+package day0530;
+
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
+public class XMLTest {
+	public static void main(String[] args) {
+		SAXReader sax = new SAXReader();
+		
+		try {
+			Document doc = sax.read("src/day0530/class.xml");
+			Element root = doc.getRootElement();
+			List<Element> list = root.elements();
+			for (Element ele : list) {
+				System.out.println(ele.element("name"));
+			}
+			
+		} catch (DocumentException e) {
+			e.printStackTrace();
+		}
+	}
+}

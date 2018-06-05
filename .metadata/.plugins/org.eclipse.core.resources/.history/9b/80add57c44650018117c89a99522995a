@@ -1,0 +1,37 @@
+package day0601;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+public class ClientDemo {
+	public static void main(String[] args) {
+		Socket socket = null;
+		try {
+			socket = new Socket("localhost", 8888);
+			OutputStream os = socket.getOutputStream();
+			PrintWriter pw = new PrintWriter(os, true);
+			Scanner sc = new Scanner(System.in);
+			
+			while(true) {
+				System.out.println("«Î ‰»Îƒ⁄»›£∫");
+				String str = sc.nextLine();
+				pw.println(str);
+			}
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

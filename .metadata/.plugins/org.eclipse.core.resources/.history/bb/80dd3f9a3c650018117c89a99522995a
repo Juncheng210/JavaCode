@@ -1,0 +1,35 @@
+package day0601;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerReceiveFile {
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		Socket socket = null;
+		try {
+			server = new ServerSocket(8888);
+			socket = server.accept();
+			//读取客户端发送的文件
+			InputStream is = socket.getInputStream();
+			File update = new File("D:/test/b/");
+			if(!update.exists()) {
+				update.mkdir();
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				socket.close();
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+}

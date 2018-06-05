@@ -1,0 +1,41 @@
+package day0601;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+public class ServerDemo {
+	public static void main(String[] args) {
+		ServerSocket server = null;
+		Socket socket = null;
+		InputStream is = null;
+		BufferedReader br = null;
+		try {
+			server = new ServerSocket(8888);
+			socket = server.accept();
+			is = socket.getInputStream();
+			
+			InputStreamReader isr = new InputStreamReader(is);
+			br = new BufferedReader(isr);
+			
+			String str = "";
+			while(true) {
+				str = br.readLine();
+				System.out.println(str);
+			}
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				br.close();
+				server.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
