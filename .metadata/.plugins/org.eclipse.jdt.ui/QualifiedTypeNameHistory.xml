@@ -2,7 +2,6 @@
 <qualifiedTypeNameHistroy>
 <fullyQualifiedTypeName name="java.lang.Class"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
-<fullyQualifiedTypeName name="java.util.Iterator"/>
 <fullyQualifiedTypeName name="java.lang.StringBuilder"/>
 <fullyQualifiedTypeName name="org.dom4j.DocumentFactory"/>
 <fullyQualifiedTypeName name="org.dom4j.io.OutputFormat"/>
@@ -47,7 +46,6 @@
 <fullyQualifiedTypeName name="javax.swing.ImageIcon"/>
 <fullyQualifiedTypeName name="java.awt.Image"/>
 <fullyQualifiedTypeName name="java.awt.GridBagLayout"/>
-<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
 <fullyQualifiedTypeName name="javax.swing.JDialog"/>
 <fullyQualifiedTypeName name="day0605.JListTest"/>
 <fullyQualifiedTypeName name="javax.swing.JFrame"/>
@@ -60,4 +58,6 @@
 <fullyQualifiedTypeName name="client.MessageType"/>
 <fullyQualifiedTypeName name="client.ManageFriendList"/>
 <fullyQualifiedTypeName name="client.ManageChat"/>
+<fullyQualifiedTypeName name="java.awt.event.ActionListener"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
 </qualifiedTypeNameHistroy>

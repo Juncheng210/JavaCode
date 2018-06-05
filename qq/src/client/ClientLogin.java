@@ -5,8 +5,6 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.ObjectOutputStream;
 
 import javax.swing.ImageIcon;
@@ -52,17 +50,23 @@ public class ClientLogin extends JFrame implements ActionListener {
 		close = new JButton(img);
 		close.setBounds(394, 0, 20, 20);
 		close.setBorderPainted(false);
-		close.addMouseListener(new MouseAdapter() {
+		close.addActionListener(new ActionListener() {
 			@Override
-			public void mouseEntered(MouseEvent e) {
-				close.setBackground(Color.RED);
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-				close.setBackground(null);
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
 			}
 		});
+//		close.addMouseListener(new MouseAdapter() {
+//			@Override
+//			public void mouseEntered(MouseEvent e) {
+//				close.setBackground(Color.RED);
+//			}
+//
+//			@Override
+//			public void mouseExited(MouseEvent e) {
+//				close.setBackground(null);
+//			}
+//		});
 		jbl1.add(close);
 		
 		//处理下面的部分
