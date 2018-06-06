@@ -1,6 +1,6 @@
 package com.juncheng.user;
 
-public class User {
+public class UserInfo {
 	private String name;
 	private String account;
 	private String password;
@@ -10,32 +10,30 @@ public class User {
 	private String recenIP;
 	private int userPortraitNum;
 
-	public User()
-    {
-        super();
-    }
+	public UserInfo() {
+		super();
+	}
 
-	public User(String name, String account, String password, String IP, int port, int userPortraitNum)
-    {
-        super();
-        this.name = name;
-        this.account = account;
-        this.password = password;
-        this.IP = IP;
-        this.port = port;
-        this.userPortraitNum = userPortraitNum;
-    }
+	public UserInfo(String name, String account, String password, String IP, int port, int userPortraitNum) {
+		super();
+		this.name = name;
+		this.account = account;
+		this.password = password;
+		this.IP = IP;
+		this.port = port;
+		this.userPortraitNum = userPortraitNum;
+	}
 
-	public User(String name, String account, String IP, int port, int userPortraitNum, String recentIP, int recentPort) {
-        super();
-        this.name = name;
-        this.account = account;
-        this.IP = IP;
-        this.port = port;
-        this.recenIP = recentIP;
-        this.recentPort = recentPort;
-        this.userPortraitNum = userPortraitNum;
-    }
+	public UserInfo(String name, String account, String IP, int port, int userPortraitNum, String recentIP,
+			int recentPort) {
+		this.name = name;
+		this.account = account;
+		this.IP = IP;
+		this.port = port;
+		this.recenIP = recentIP;
+		this.recentPort = recentPort;
+		this.userPortraitNum = userPortraitNum;
+	}
 
 	public int getRecentPort() {
 		return recentPort;
@@ -53,12 +51,10 @@ public class User {
 		this.recenIP = recenIP;
 	}
 
-	public User(String name, int port)
-    {
-        super();
-        this.name = name;
-        this.port = port;
-    }
+	public UserInfo(String name, int port) {
+		this.name = name;
+		this.port = port;
+	}
 
 	public String getName() {
 		return name;
@@ -108,14 +104,14 @@ public class User {
 		this.userPortraitNum = userPortraitNum;
 	}
 
-	public User setInfo(String message) {
+	public UserInfo setInfo(String message) {
 		// ±êÖ¾ IP ¶Ë¿ÚºÅ ÐÕÃû ÕËºÅ ÃÜÂë
 		this.IP = message.split("-")[1];
-		//this.port = Integer.parseInt(message.split("-")[2]);
+		// this.port = Integer.parseInt(message.split("-")[2]);
 		this.name = message.split("-")[2];
 		this.account = message.split("-")[3];
 		this.password = message.split("-")[4];
-		//this.userPortraitNum = Integer.parseInt(message.split("-")[6]);
+		// this.userPortraitNum = Integer.parseInt(message.split("-")[6]);
 		return this;
 	}
 }

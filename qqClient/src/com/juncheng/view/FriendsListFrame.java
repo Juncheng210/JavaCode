@@ -4,11 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -27,18 +28,26 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.juncheng.stream.ServerClientConnectionStream;
+import com.juncheng.user.UserInfo;
+
 public class FriendsListFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JList<String> currentOnlineUserList;
+	private UserInfo userInfo;
+	private Socket socket;
+	private ServerClientConnectionStream c2s;
 
-	public FriendsListFrame() {
+	public FriendsListFrame(UserInfo userInfo, Socket socket) {
+		this.userInfo = userInfo;
+		this.socket = socket;
 		createFrame();
 		addEventHandler();
-		showMe();
+		showWindow();
 	}
 
 	private void createFrame() {
-		setTitle("模仿QQ");
+		setTitle("模拟QQ");
 		currentOnlineUserList = new JList<String>();
 		currentOnlineUserList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		ImageIcon portraItImage = new ImageIcon("src/images/logo.png");
@@ -51,10 +60,10 @@ public class FriendsListFrame extends JFrame {
 		JPanel userInfoPanel = new JPanel(new GridLayout(2, 2, 5, 10));
 		Calendar calendar = Calendar.getInstance();
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		JLabel userInfoLable = new JLabel(hour < 6 ? "凌晨好，" : (hour < 12 ? "上午好，" : (hour < 18 ? "下午好，" : "晚上好，")));
+		JLabel userInfoLable = new JLabel(hour < 6 ? "凌晨好，" : (hour < 12 ? "上午好，" : (hour < 18 ? "下午好，" : "晚上好，" +userInfo.getName())));
 		userInfoPanel.add(userInfoLable);
 		SimpleDateFormat simpleDateFormat = (SimpleDateFormat) DateFormat.getInstance();
-		simpleDateFormat.applyPattern("yyyy年MM月dd日    E");
+		simpleDateFormat.applyPattern("yyyy年MM月dd日  E");
 		JLabel userTimeLable = new JLabel(simpleDateFormat.format(new Date()));
 		userInfoPanel.add(userTimeLable);
 		northPanel.add(userInfoPanel);
@@ -126,7 +135,6 @@ public class FriendsListFrame extends JFrame {
         panel.add(scrollPane);
         
         add(panel, BorderLayout.CENTER);
-        setVisible(true);
 	}
 
 	private void addEventHandler() {
@@ -134,19 +142,21 @@ public class FriendsListFrame extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				int t = JOptionPane.showConfirmDialog(null, "确认要退出客户端吗？\n温馨提示：退出会同时关闭所有聊天窗口", "确认退出", JOptionPane.OK_CANCEL_OPTION);
-				if (t == JOptionPane.OK_OPTION) {
-					System.exit(0);
+				if(t == JOptionPane.OK_OPTION) {
+					c2s.send("*#EXIT#*");
+					try {
+						socket.close();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+					FriendsListFrame.this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 				}
 			}
 		});
 	}
 
-	public void showMe() {
+	public void showWindow() {
 		setSize(340, 600);
 		setVisible(true);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-	}
-	public static void main(String[] args) {
-		new FriendsListFrame();
 	}
 }

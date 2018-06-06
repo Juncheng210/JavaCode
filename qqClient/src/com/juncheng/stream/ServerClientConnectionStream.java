@@ -12,7 +12,6 @@ public class ServerClientConnectionStream {
 	private PrintWriter writer;
 
 	public ServerClientConnectionStream(Socket socket) {
-		super();
 		this.socket = socket;
 		getStream();
 	}

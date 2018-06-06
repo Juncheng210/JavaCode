@@ -5,17 +5,17 @@ import java.net.UnknownHostException;
 
 import javax.swing.JTextArea;
 
-import stream.ClientToClientConnectionStream;
-import user.User;
+import com.juncheng.stream.Client2ClientStream;
+import com.juncheng.user.UserInfo;
 
 public class ReadMessageFromClientThread implements Runnable {
-	private ClientToClientConnectionStream userDataCS;
+	private Client2ClientStream userDataCS;
 	private JTextArea chatTextArea;
-	private User toUserInfo;
+	private UserInfo toUserInfo;
 	private volatile boolean stop = false;
 
-	public ReadMessageFromClientThread(ClientToClientConnectionStream userDataCS, JTextArea chatTextArea,
-			User toUserInfo) {
+	public ReadMessageFromClientThread(Client2ClientStream userDataCS, JTextArea chatTextArea,
+			UserInfo toUserInfo) {
 		super();
 		this.userDataCS = userDataCS;
 		this.chatTextArea = chatTextArea;

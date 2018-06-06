@@ -27,12 +27,12 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
 import com.juncheng.stream.Server2ClientStream;
-import com.juncheng.user.User;
+import com.juncheng.user.UserInfo;
 
 public class ServerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Map<String, Server2ClientStream> userMap;
-	private Set<User> userSet;
+	private Set<UserInfo> userSet;
 	private ServerSocket serverSocket;
 	private JButton start;
 	private JLabel welcome;
@@ -43,7 +43,7 @@ public class ServerFrame extends JFrame {
 	public ServerFrame() {
 		super();
 		userMap = new HashMap<String, Server2ClientStream>();
-		userSet = new HashSet<User>();
+		userSet = new HashSet<UserInfo>();
 		welcome = new JLabel("服务器端");
 		hintInfo = new JTextArea("当前状态：服务器未启动！\n");
 		startInfoTextArea = new JTextArea();
