@@ -28,8 +28,6 @@ import javax.swing.JTextArea;
 
 public class ChatRoomServerFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	//private Map<String, ServerClientConnectionStream> userMap;
-	//private Set<User> userSet;
 	private ServerSocket serverSocket;
 	private JButton start;
 	private JLabel welcome;
@@ -38,8 +36,6 @@ public class ChatRoomServerFrame extends JFrame {
 	private JTextArea startInfoTextArea;
 
 	public ChatRoomServerFrame() {
-		//userMap = new HashMap<String, ServerClientConnectionStream>();
-		//userSet = new HashSet<User>();
 		welcome = new JLabel("服务器端");
 		hintInfo = new JTextArea("当前状态：服务器未启动！\n");
 		startInfoTextArea = new JTextArea();
@@ -116,13 +112,11 @@ public class ChatRoomServerFrame extends JFrame {
 				startInfoTextArea.append("开始监听客户端连接...\n");
 				printServerInfo();
 				Socket socket = serverSocket.accept();
-				startInfoTextArea.append("已从客户端IP：" + socket.getInetAddress().getHostAddress() + ",端口号(TCP)："
-						+ socket.getPort() + "接收到数据...\n");
-				//new Thread(new ChatRoomServerThread(new ServerClientConnectionStream(socket), userSet, userMap, hintInfo, startInfoTextArea, onlineUserInfo)).start();
+				startInfoTextArea.append("已从客户端IP：" + socket.getInetAddress().getHostAddress() + ",端口号(TCP)：" + socket.getPort() + "接收到数据...\n");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} // while
+		}
 	}
 
 	private void printServerInfo() {
@@ -131,7 +125,6 @@ public class ChatRoomServerFrame extends JFrame {
 			hintInfo.append("\n服务器名称：" + InetAddress.getLocalHost().getHostName());
 			hintInfo.append("\n服务器IP地址：" + InetAddress.getLocalHost().getHostAddress());
 			hintInfo.append("\n监听端口：8888");
-			//hintInfo.append("\n当前在线人数：" + userMap.size());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

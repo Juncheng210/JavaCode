@@ -10,6 +10,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
@@ -44,6 +45,8 @@ public class LoginFrame extends JFrame {
 	private JPanel jPanel_2;
 	private JPanel jPanel_3;
 	private JButton login;
+	
+	private boolean flag;
 
 	public LoginFrame() throws HeadlessException {
 		createFrame();
@@ -51,14 +54,14 @@ public class LoginFrame extends JFrame {
 	}
 
 	private void createFrame() {
-		setTitle("登陆");
+		setTitle("登录");
 		ImageIcon image1 = new ImageIcon("src/qq/images/background.jpg");
 		JLabel imageLable = new JLabel(image1);
 		ImageIcon portraItImage = new ImageIcon("src/qq/images/logo.png");
 		portraItImage.setImage(portraItImage.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		JLabel portraItImageLable = new JLabel(portraItImage);
 		JPanel mainLayout = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
-		accountField = new JTextField(15);
+		accountField = new JTextField("请输入账号", 15);
 		login = new JButton("安全登录");
 		login.setBackground(new Color(30, 144, 255));
 		login.setForeground(Color.white);
@@ -111,6 +114,17 @@ public class LoginFrame extends JFrame {
 	}
 
 	private void addHandlerEvent() {
+		accountField.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(flag) {
+					return;
+				}
+				accountField.setText("");
+				flag = true;
+			}
+		});
+		
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -122,50 +136,14 @@ public class LoginFrame extends JFrame {
 			}
 		});
 
-		register.addMouseListener(new MouseListener() {
-
+		register.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
 			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-			}
-
-			@Override
-			public void mouseReleased(MouseEvent e) {
-			}
 		});
-		findPassword.addMouseListener(new MouseListener() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mousePressed(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseExited(MouseEvent e) {
-
-			}
-
-			@Override
-			public void mouseEntered(MouseEvent e) {
-
-			}
-
+		
+		findPassword.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
