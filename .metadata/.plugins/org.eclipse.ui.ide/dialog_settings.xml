@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="E:\java\eclipse-workspace"/>
 		<item value="D:\juncheng210\eclipse-workspace\src"/>
 		<item value="D:\juncheng210\eclipse-workspace\qqClient\src"/>
 		<item value="E:\唐老师\5-24\homework"/>
@@ -10,8 +11,8 @@
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
-			<item value="D:\juncheng210\eclipse-workspace"/>
 			<item value="E:\java\eclipse-workspace"/>
+			<item value="D:\juncheng210\eclipse-workspace"/>
 			<item value="D:\juncheng210\小游戏\Game2048"/>
 		</list>
 		<list key="WizardProjectsImportPage.STORE_ARCHIVES">
