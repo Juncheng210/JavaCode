@@ -43,8 +43,7 @@ public class LoginFrame extends JFrame {
 	private JPanel jPanel1, jPanel2, jPanel3;
 	private JButton login;//登录按钮
 	
-	private String username;
-	private String nick;
+	private String name;
 	private Socket socket;
 	private UserInfo userInfo;
 	private static final int SERVER_PORT = 8888;
@@ -53,8 +52,6 @@ public class LoginFrame extends JFrame {
 	private ServerClientConnectionStream c2s;
 	private String message;
 	
-	private boolean flag;//标记，用于控制用户输入框的默认文本
-
 	public LoginFrame() {
 		init();
 		createFrame();
@@ -87,7 +84,7 @@ public class LoginFrame extends JFrame {
 		JPanel operLayout = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		
 		//创建账号和密码框
-		accountField = new JTextField("请输入账号", 15);
+		accountField = new JTextField(15);
 		passwordField = new JPasswordField(15);
 		
 		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
@@ -142,25 +139,17 @@ public class LoginFrame extends JFrame {
 		setVisible(true);
 	}
 
-	private void addHandlerEvent() {
-		accountField.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if(flag) {
-					return;
-				}
-				accountField.setText("");
-				flag = true;
-			}
-		});
-		
+	private void addHandlerEvent() {		
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				if(accountField.getText().trim().equals("") || String.valueOf(passwordField.getPassword()).equals("")) {
+					return;
+				}
 				System.out.println("已开始向服务器发送登录数据...");
-				c2s.send("*#login#*-"+localAddress.getHostAddress()+"-"+accountField.getText()+"-" + "" + "-" + String.valueOf(passwordField.getPassword()).trim());
+				c2s.send("*#LOGIN#*-"+localAddress.getHostAddress()+"-" + name +accountField.getText().trim()+"-" + "-" + String.valueOf(passwordField.getPassword()).trim());
 				System.out.println("等待服务器返回登录结果...");
-				while (true) {
+				//while (true) {
 					message = c2s.read();
 					if ("LOGIN_FIAL".equals(message)) {
 						JOptionPane.showMessageDialog(null, "已有相同的账号，请重新输入");
@@ -169,10 +158,10 @@ public class LoginFrame extends JFrame {
 					} else if ("NAME_IS_NULL".equals(message)) {
 						// setVisible(false);
 						dispose();
-						username = JOptionPane.showInputDialog(null, "来给自己起个名字吧");
+						name = JOptionPane.showInputDialog(null, "来给自己起个名字吧");
 						try {
 							//发送：标志   IP 姓名  账号  密码
-							c2s.send("*#login#*-" + InetAddress.getLocalHost().getHostAddress() + "-" + username + "-" + accountField.getText() + "-" + String.valueOf(passwordField.getPassword()).trim());
+							c2s.send("*#LOGIN#*-" + InetAddress.getLocalHost().getHostAddress() + "-" + name + "-" + accountField.getText().trim() + "-" + String.valueOf(passwordField.getPassword()).trim());
 							userInfo.setIP(InetAddress.getLocalHost().getHostAddress());
 							//userInfo.setRecenIP(InetAddress.getLocalHost().getHostAddress());
 							//userInfo.setRecentPort(userPort);
@@ -183,22 +172,20 @@ public class LoginFrame extends JFrame {
 					} else if ("LOGIN_SUCESSFULLY".equals(message)) {
 						setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 						userInfo.setAccount(accountField.getText());
-						userInfo.setName(username);
+						userInfo.setName(name);
 						//userInfo.setPort(userPort);
 						//LoginProcess loginProcess = new LoginProcess(userInfo.getUserPortraitNum());
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						}
+//						try {
+//							Thread.sleep(1000);
+//						} catch (InterruptedException e) {
+//							e.printStackTrace();
+//						}
 						//loginProcess.dispose();
-						//new ChatRoomUserListFrame(userCS, userInfo).showMe();
-						JDialog jd = new JDialog(new FriendsListFrame());
-						jd.setVisible(true);
+						new JDialog(new FriendsListFrame(userInfo, socket, c2s));
 						LoginFrame.this.dispose();
-						JOptionPane.showMessageDialog(null, "登录成功！");
+//						JOptionPane.showMessageDialog(null, "登录成功！");
 					}
-				}
+				//}
 			}
 		});
 

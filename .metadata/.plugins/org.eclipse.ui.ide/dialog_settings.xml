@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="D:\juncheng210\eclipse-workspace\src"/>
+		<item value="D:\juncheng210\eclipse-workspace\qqClient\src"/>
 		<item value="E:\唐老师\5-24\homework"/>
 	</list>
 	<section name="ExternalProjectImportWizard">

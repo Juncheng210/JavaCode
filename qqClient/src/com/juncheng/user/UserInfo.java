@@ -24,6 +24,10 @@ public class UserInfo {
 		this.IP = iP;
 		this.port = port;
 	}
+	
+	public UserInfo(String account) {
+        this.account = account;
+    }
 
 
 	public String getName() {

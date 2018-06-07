@@ -8,12 +8,10 @@ public class MyMap extends Observable {
 	private Map<String, Boolean> myMap;
 
 	public MyMap() {
-		super();
 		myMap = new HashMap<String, Boolean>();
 	}
 
 	public MyMap(String key, boolean value) {
-		super();
 		myMap = new HashMap<String, Boolean>();
 		myMap.put(key, value);
 	}

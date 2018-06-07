@@ -36,12 +36,12 @@ public class ReadMessageFromClientThread implements Runnable {
 						userDataCS.setPort(userDataCS.getUserReceivePacket().getPort());
 						System.out.println("客户端中现IP：" + userDataCS.getHostAddress() + "现在端口：" + userDataCS.getPort());
 					} else if ("I_HAVE_EXIT_THE_WINDOW".equals(message)) {
-						try {
-							userDataCS.setHostAddress(InetAddress.getByName(toUserInfo.getRecenIP()));
-							userDataCS.setPort(toUserInfo.getRecentPort());
-						} catch (UnknownHostException e) {
-							e.printStackTrace();
-						}
+//						try {
+//							userDataCS.setHostAddress(InetAddress.getByName(toUserInfo.getRecenIP()));
+//							userDataCS.setPort(toUserInfo.getRecentPort());
+//						} catch (UnknownHostException e) {
+//							e.printStackTrace();
+//						}
 					} else {
 						String tString[] = message.split("-");
 						System.out.println("客户端--客户端(IP:" + userDataCS.getHostAddress() + "端口(UDP)："

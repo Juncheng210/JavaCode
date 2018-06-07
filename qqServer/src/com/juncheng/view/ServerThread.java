@@ -8,19 +8,19 @@ import java.util.Set;
 import javax.swing.JTextArea;
 
 import com.juncheng.stream.Server2ClientStream;
-import com.juncheng.user.User;
+import com.juncheng.user.UserInfo;
 
 public class ServerThread implements Runnable {
 	private Server2ClientStream userCS;
-	private User userInfo;
-	private Set<User> userSet;
+	private UserInfo userInfo;
+	private Set<UserInfo> userSet;
 	private Map<String, Server2ClientStream> userMap;
 	private StringBuffer userList;
 	private JTextArea hintInfo;
 	private JTextArea startInfoTextArea;
 	private JTextArea onlineUserInfo;
 
-	public ServerThread(Server2ClientStream userCS, Set<User> userSet,
+	public ServerThread(Server2ClientStream userCS, Set<UserInfo> userSet,
 			Map<String, Server2ClientStream> userMap, JTextArea hintInfo, JTextArea startInfoTextArea,
 			JTextArea onlineUserInfo) {
 		super();
@@ -31,14 +31,14 @@ public class ServerThread implements Runnable {
 		this.startInfoTextArea = startInfoTextArea;
 		this.onlineUserInfo = onlineUserInfo;
 		userList = new StringBuffer();
-		userInfo = new User();
+		userInfo = new UserInfo();
 	}
 
 	@Override
 	public void run() {
 		while (true) {
 			String message = userCS.read();
-			if (message.indexOf("*#login#*") == 0) {
+			if (message.indexOf("*#LOGIN#*") == 0) {
 				userInfo.setInfo(message);
 				// 标志 IP 端口号 姓名 账号 密码
 				if (userMap.containsKey(userInfo.getAccount())) {
@@ -53,7 +53,7 @@ public class ServerThread implements Runnable {
 					userList.append(userInfo.getAccount() + "&LOGIN:");
 					sendCurrentUserList();
 				}
-			} else if (message.indexOf("%EXIT%") == 0) {
+			} else if (message.indexOf("*#EXIT#*") == 0) {
 				startInfoTextArea.append("服务器收到客户端账号：" + userInfo.getAccount() + "的退出请求...\n");
 				userMap.remove(userInfo.getAccount());
 				userSet.remove(userInfo);
@@ -71,7 +71,7 @@ public class ServerThread implements Runnable {
 	public void sendCurrentUserList() {
 		System.out.println("正在向客户端发送用户列表消息...");
 		onlineUserInfo.setText("");
-		for (User userInfo : userSet) {
+		for (UserInfo userInfo : userSet) {
 			onlineUserInfo.append("账号：" + userInfo.getAccount() + ",密码：" + userInfo.getPassword() + ",昵称："
 					+ userInfo.getName() + ",IP地址：" + userInfo.getIP() + ",端口号(UDP)：" + userInfo.getPort() + "\n");
 			userList.append(userInfo.getIP() + "-" + userInfo.getPort() + "-" + userInfo.getAccount() + "-"
@@ -94,7 +94,7 @@ public class ServerThread implements Runnable {
 		try {
 			hintInfo.append("\n服务器名称：" + InetAddress.getLocalHost().getHostName());
 			hintInfo.append("\n服务器IP地址：" + InetAddress.getLocalHost().getHostAddress());
-			hintInfo.append("\n监听端口：9000");
+			hintInfo.append("\n监听端口：8888");
 			hintInfo.append("\n当前在线人数：" + userMap.size());
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

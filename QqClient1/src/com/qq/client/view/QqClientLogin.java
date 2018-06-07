@@ -31,8 +31,7 @@ public class QqClientLogin extends JFrame implements ActionListener {
 		QqClientLogin qqClientLogin=new QqClientLogin();
 	}
 	
-	public QqClientLogin()
-	{
+	public QqClientLogin() {
 		//处理北部
 		jbl1=new JLabel(new ImageIcon("image/tou.gif"));
 		
