@@ -20,10 +20,8 @@ public class UserInfo {
 	}
 	
 	public UserInfo setUserInfo(String message) {
-		String[] strs = message.split("-");
-		this.username = strs[1];
-		this.nickname = strs[2];
-		this.ip = strs[3];
+		
+		
 		return this;
 	}
 

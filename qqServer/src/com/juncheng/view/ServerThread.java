@@ -42,7 +42,7 @@ public class ServerThread implements Runnable {
 				userInfo.setInfo(message);
 				// 标志 IP 端口号 姓名 账号 密码
 				if (userMap.containsKey(userInfo.getAccount())) {
-					userCS.send("LOGIN_FIAL");
+					userCS.send("LOGIN_FAIL");
 				} else if (userInfo.getName().equals("")) {
 					userCS.send("NAME_IS_NULL");
 				} else {

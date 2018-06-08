@@ -1,40 +1,57 @@
 package com.qq.view;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 
-import com.qq.stream.Server2ClientStream;
+import com.qq.stream.ConnectionStream;
+import com.qq.thread.ServerThread;
 import com.qq.user.UserInfo;
 
 public class ServerFrame extends JFrame {
+	private static final long serialVersionUID = 1L;
 	private JTextArea stateInfo;//服务器状态
 	private JTextArea runInfo;//服务器运行信息
 	private JTextArea onlineUserInfo;//在线用户信息
 	private JButton start;//启动服务器按钮
 	
-	private Map<String, Server2ClientStream> userMap;//存放在线用户及流传输信息
-	private Set<UserInfo> userSet;
+	private Map<String, ConnectionStream> userMap;//存放在线用户及流传输信息
+	private Set<UserInfo> userSet;//存放用户信息
 	private ServerSocket serverSocket;
 	
 	
 	public ServerFrame() {
+		userMap = new HashMap<String, ConnectionStream>();
+		userSet = new HashSet<UserInfo>();
 		createFrame();
+		addEventHandler();
 	}
-	
+	/**
+	 * @Title: createFrame  
+	 * @Description: 创建服务器的可视化管理界面
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void createFrame() {
 		JPanel jPanel = new JPanel();
 		
@@ -45,7 +62,7 @@ public class ServerFrame extends JFrame {
 		runInfo = new JTextArea();
 		onlineUserInfo = new JTextArea();
 		stateInfo.setEditable(false);
-		runInfo.setEnabled(false);
+		runInfo.setEditable(false);
 		onlineUserInfo.setEditable(false);
 		
 		//创建一个选项卡
@@ -71,7 +88,52 @@ public class ServerFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setVisible(true);
 	}
-	
+	/**
+	 * @Title: addEventHandler  
+	 * @Description: 事件监听及处理
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
+	private void addEventHandler() {
+		/**
+		 * 启动按钮的事件监听及处理
+		 */
+		start.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					serverSocket = new ServerSocket(8888);
+					new Thread(new Runnable() {
+						@Override
+						public void run() {
+							startServer();
+						}
+					}).start();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		
+		/**
+		 * 关闭窗口的监听及处理
+		 */
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int quit = JOptionPane.showConfirmDialog(null, "确认退出服务器吗？", "是否退出", JOptionPane.OK_CANCEL_OPTION);
+				if(quit == JOptionPane.OK_OPTION) {
+					System.exit(0);
+				}
+			}
+		});
+	}
+	/**
+	 * @Title: startServer  
+	 * @Description: 启动服务器
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void startServer() {
 		while(true) {
 			System.out.println("开始监听客户端连接...");
@@ -80,13 +142,18 @@ public class ServerFrame extends JFrame {
 			try {
 				Socket socket = serverSocket.accept();
 				runInfo.append("已从客户端（" + socket.getInetAddress().getHostAddress() + ":" + socket.getPort() + "）接收到数据...\n");
-				new Thread(new ServerThread()).start();
+				new Thread(new ServerThread(new ConnectionStream(socket), userSet, userMap, stateInfo, runInfo, onlineUserInfo)).start();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+	/**
+	 * @Title: printServerInfo  
+	 * @Description: 打印服务器对应的信息
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void printServerInfo() {
 		stateInfo.setText("当前状态：开始监听客户端连接...");
 		try {

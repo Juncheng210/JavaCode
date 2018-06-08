@@ -6,12 +6,12 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Server2ClientStream {
+public class ConnectionStream {
 	private Socket socket;
 	private BufferedReader reader;
 	private PrintWriter writer;
 
-	public Server2ClientStream(Socket socket) {
+	public ConnectionStream(Socket socket) {
 		this.socket = socket;
 		getStream();
 	}
