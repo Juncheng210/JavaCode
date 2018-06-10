@@ -12,7 +12,7 @@ public final class LoginAndRegister {
 		Properties pro = new Properties();
 		try {
 			pro.load(new FileInputStream(USER_FILE_PATH));
-			if(pro.getProperty(username)!=null || pro.getProperty(username).equals(password)) {
+			if(pro.getProperty(username)!=null && pro.getProperty(username).equals(password)) {
 				return true;
 			}
 		} catch (FileNotFoundException e) {

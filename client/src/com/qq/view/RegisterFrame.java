@@ -1,11 +1,8 @@
 package com.qq.view;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,8 +17,6 @@ import java.net.UnknownHostException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -32,15 +27,14 @@ import javax.swing.JTextField;
 import com.qq.stream.ConnectionStream;
 import com.qq.user.UserInfo;
 
-public class LoginFrame extends JFrame {
+public class RegisterFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JLabel register;//注册
-	private JLabel findPassword;//找回密码
-	private JCheckBox rememberPassword, autoLogin;//记住密码，自动登录
+	private JLabel jLabel1, jLabel2, jLabel3;
 	private JTextField accountField;//账号文本框
+	private JTextField nicknameField;//昵称文本框
 	private JPasswordField passwordField;//密码文本框
-	private JPanel jPanel1, jPanel2, jPanel3;
-	private JButton login;//登录按钮
+	private JPanel jPanel1, jPanel2, jPanel3, jPanel4;
+	private JButton register;//登录按钮
 	
 	private String nickname;
 	private Socket socket;
@@ -51,7 +45,7 @@ public class LoginFrame extends JFrame {
 	private ConnectionStream connection;
 	private String message;
 	
-	public LoginFrame() {
+	public RegisterFrame() {
 		init();
 		createFrame();
 		addHandlerEvent();
@@ -59,7 +53,7 @@ public class LoginFrame extends JFrame {
 
 	private void createFrame() {
 		//窗口基础操作设置
-		setTitle("登录");
+		setTitle("注册");
 		setSize(420, 360);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -76,70 +70,70 @@ public class LoginFrame extends JFrame {
 		ImageIcon backgroundImg = new ImageIcon("src/com/qq/resources/background.jpg");
 		JLabel imgLable = new JLabel(backgroundImg);
 		//设置默认头像
-		ImageIcon iconImg = new ImageIcon("src/com/qq/resources/logo.png");
-		iconImg.setImage(iconImg.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-		JLabel iconImgLable = new JLabel(iconImg);
+		//ImageIcon iconImg = new ImageIcon("src/com/qq/resources/logo.png");
+		//iconImg.setImage(iconImg.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
+		//JLabel iconImgLable = new JLabel(iconImg);
 		//操作区域
 		JPanel operLayout = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		
+		jLabel1 = new JLabel("账号");
+		jLabel2 = new JLabel("昵称");
+		jLabel3 = new JLabel("密码");
+		
 		//创建账号和密码框
 		accountField = new JTextField(15);
+		nicknameField = new JTextField(15);
 		passwordField = new JPasswordField(15);
 		
 		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
 		jPanel.add(imgLable);
 		JPanel accRes = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-		JPanel passRes = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-		JPanel accPassHintPanel = new JPanel(new GridLayout(3, 15, 0, 0));
-		//注册账号
-		register = new JLabel("注册账号");
-		register.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		register.setForeground(Color.BLUE);
-		//找回密码
-		findPassword = new JLabel("找回密码");
-		findPassword.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		findPassword.setForeground(Color.BLUE);
-		//记住密码
-		rememberPassword = new JCheckBox("记住密码");
-		//自动登录
-		autoLogin = new JCheckBox("自动登录");
-		//登录按钮
-		login = new JButton("安全登录");
-		login.setBackground(new Color(30, 144, 255));
-		login.setForeground(Color.WHITE);
-		login.setPreferredSize(new Dimension(170, 30));
+		//注册按钮
+		register = new JButton("注册");
+		register.setBackground(new Color(30, 144, 255));
+		register.setForeground(Color.WHITE);
+		register.setPreferredSize(new Dimension(210, 30));
 		
-		accRes.add(accountField);
+//		accRes.add(jLabel1);
+//		accRes.add(accountField);
+//		accRes.add(jLabel2);
+//		accRes.add(nicknameField);
+//		accRes.add(jLabel3);
+//		passRes.add(passwordField);
 		accRes.add(register);
 		
-		passRes.add(passwordField);
-		passRes.add(findPassword);
+//		accPassHintPanel.add(accRes);
+//		accPassHintPanel.add(passRes);
 		
-		accPassHintPanel.add(accRes);
-		accPassHintPanel.add(passRes);
+		jPanel1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+		//jPanel1.add(iconImgLable);
+		jPanel1.add(jLabel1);
+		jPanel1.add(accountField);
 		
-		jPanel1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 13));
-		jPanel1.add(iconImgLable);
-		jPanel1.add(accPassHintPanel);
+		jPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+		jPanel2.add(jLabel2);
+		jPanel2.add(nicknameField);
 		
-		jPanel2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 0));
-		jPanel2.add(rememberPassword);
-		jPanel2.add(autoLogin);
+		jPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+		jPanel3.add(jLabel3);
+		jPanel3.add(passwordField);
 		
-		jPanel3 = new JPanel();
-		jPanel3.add(login);
+		jPanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+		jPanel4.add(register);
 		
-		accPassHintPanel.add(jPanel2);
+		//accPassHintPanel.add(jPanel2);
 		operLayout.add(jPanel);
 		operLayout.add(jPanel1);
+		operLayout.add(jPanel2);
 		operLayout.add(jPanel3);
+		operLayout.add(jPanel4);
 		add(operLayout);
 		
 		setVisible(true);
 	}
 
 	private void addHandlerEvent() {		
-		login.addActionListener(new ActionListener() {
+		register.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if(accountField.getText().trim().equals("") || String.valueOf(passwordField.getPassword()).equals("")) {
@@ -181,7 +175,7 @@ public class LoginFrame extends JFrame {
 //						}
 						//loginProcess.dispose();
 						new FriendsListFrame((UserInfo)connection.readObject(), socket, connection);
-						LoginFrame.this.dispose();
+						RegisterFrame.this.dispose();
 //						JOptionPane.showMessageDialog(null, "登录成功！");
 					} else if("ERROR".equals(message)) {
 						JOptionPane.showMessageDialog(null, "密码错误，请重试！");
@@ -198,25 +192,6 @@ public class LoginFrame extends JFrame {
 			}
 		});
 		
-		findPassword.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
-			}
-		});
-		rememberPassword.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
-			}
-		});
-		autoLogin.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
-			}
-		});
-
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -238,5 +213,9 @@ public class LoginFrame extends JFrame {
 			System.out.println("创建套接字时发生 I/O 错误!");
 			e.printStackTrace();
 		}
+	}
+	
+	public static void main(String[] args) {
+		new RegisterFrame();
 	}
 }

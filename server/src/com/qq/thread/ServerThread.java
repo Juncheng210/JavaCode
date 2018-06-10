@@ -1,5 +1,8 @@
 package com.qq.thread;
 
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.Set;
 
@@ -8,6 +11,7 @@ import javax.swing.JTextArea;
 import com.qq.stream.ConnectionStream;
 import com.qq.user.UserInfo;
 import com.qq.util.LoginAndRegister;
+import com.qq.util.MyUtils;
 
 public class ServerThread implements Runnable {
 	private JTextArea stateInfo;//服务器状态
@@ -37,10 +41,13 @@ public class ServerThread implements Runnable {
 				if(LoginAndRegister.loginCheck(userInfo.getUsername(), message.split("-")[4])) {
 					userMap.put(userInfo.getUsername(), connection);
 					userSet.add(userInfo);
-					connection.send("LOGIN_SUCCESSFUL");
+					connection.send("LOGIN_SUCCESSFULLY");
 					runInfo.append("用户" + userInfo.getUsername() + "登录服务器成功！\n");
+					connection.sendObject(MyUtils.readUserList(userInfo.getUsername()));
 				} else if(userMap.containsKey(userInfo.getUsername())) {
 					connection.send("LOGIN_FAIL");
+				} else {
+					connection.send("ERROR");
 				}
 			} else if(message.startsWith("*#EXIT#*")) {
 				runInfo.append("收到用户 " + userInfo.getUsername() + " 的退出请求...\n");
@@ -55,5 +62,34 @@ public class ServerThread implements Runnable {
 	
 	public void sendUserList() {
 		System.out.println("正在向用户发送列表消息...");
+		onlineUserInfo.setText("");
+		UserInfo userList = MyUtils.readUserList(userInfo.getUsername());
+		connection.sendObject(userList);
+//		for (UserInfo userInfo : userSet) {
+//			onlineUserInfo.append(str);
+//		}
+		runInfo.append("已向用户 " + userInfo.getUsername() + " 发送了用户列表消息！\n");
+		
+		printServerInfo();
+		System.out.println("已更新了服务器状态信息！");
+		runInfo.append("已更新了服务器状态信息！\n");
+	}
+	
+	/**
+	 * @Title: printServerInfo  
+	 * @Description: 打印服务器对应的信息
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
+	private void printServerInfo() {
+		stateInfo.setText("当前状态：开始监听客户端连接...");
+		try {
+			stateInfo.append("\n服务器名称：" + InetAddress.getLocalHost().getHostName());
+			stateInfo.append("\n服务器IP地址：" + InetAddress.getLocalHost().getHostAddress());
+			stateInfo.append("\n监听端口：8888");
+			stateInfo.append("\n当前在线人数：" + userMap.size());
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 }

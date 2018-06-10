@@ -1,11 +1,18 @@
 package com.qq.user;
 
-public class UserInfo {
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+public class UserInfo implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private String username;//用户名
 	private String nickname;//昵称
 	private String password;//密码
 	private String ip;//ip地址
 	private int port;//端口号
+	
+	public List<Group> groupList = new ArrayList<Group>();
 	
 	public UserInfo() {
 		
@@ -65,5 +72,13 @@ public class UserInfo {
 
 	public void setPort(int port) {
 		this.port = port;
+	}
+
+	public List<Group> getGroupList() {
+		return groupList;
+	}
+
+	public void setGroupList(List<Group> groupList) {
+		this.groupList = groupList;
 	}
 }
