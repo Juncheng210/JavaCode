@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -23,16 +25,17 @@ import java.util.Map.Entry;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTree;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 
 import com.qq.stream.ConnectionStream;
 import com.qq.user.Group;
@@ -41,9 +44,9 @@ import com.qq.util.MyMap;
 
 public class FriendsListFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JList<String> currentOnlineUserList;
 	private JTree tree;
 	private UserInfo userInfo;
+	private static String friendUsername;
 	//private ChatFrame chatFrame;
 	private MyMap isOpenMap;
 	private Map<String, String> userInfoMap;
@@ -59,32 +62,37 @@ public class FriendsListFrame extends JFrame {
 		addEventHandler();
 		showWindow();
 	}
-
+	
+	public void init() {
+		isOpenMap = new MyMap();
+	}
+	
 	private void createFrame() {
 		setTitle("模拟QQ");
-		currentOnlineUserList = new JList<String>();
-		currentOnlineUserList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
 		ImageIcon portraItImage = new ImageIcon("src/images/logo.png");
 		portraItImage.setImage(portraItImage.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
 		JLabel portraItImageLable = new JLabel(portraItImage);
-		JScrollPane listScrollPane = new JScrollPane(currentOnlineUserList);
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		JPanel northPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 5));
 		northPanel.add(portraItImageLable, BorderLayout.NORTH);
 		JPanel userInfoPanel = new JPanel(new GridLayout(2, 2, 5, 10));
+		
 		Calendar calendar = Calendar.getInstance();
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		JLabel userInfoLable = new JLabel(hour < 6 ? "凌晨好，" : (hour < 12 ? "上午好，" : (hour < 18 ? "下午好，" : "晚上好，" +userInfo.getNickname())));
+		JLabel userInfoLable = new JLabel(hour < 6 ? "凌晨好，" : (hour < 12 ? "上午好，" : (hour < 18 ? "下午好，" : "晚上好，")) + userInfo.getNickname());
 		userInfoPanel.add(userInfoLable);
+		
 		SimpleDateFormat simpleDateFormat = (SimpleDateFormat) DateFormat.getInstance();
 		simpleDateFormat.applyPattern("yyyy年MM月dd日  E");
 		JLabel userTimeLable = new JLabel(simpleDateFormat.format(new Date()));
 		userInfoPanel.add(userTimeLable);
+		
 		northPanel.add(userInfoPanel);
 		centerPanel.add(new JLabel("在线用户列表："), BorderLayout.CENTER);
-		centerPanel.add(listScrollPane, BorderLayout.CENTER);
 		add(northPanel, BorderLayout.NORTH);
 		add(centerPanel, BorderLayout.CENTER);
+		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
 		int width = getWidth();
@@ -103,7 +111,7 @@ public class FriendsListFrame extends JFrame {
 		contacts.add(panel);
 		contacts.setLocation(5, 5);
         // 创建根节点
-        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("好友列表");
+        DefaultMutableTreeNode rootNode = new DefaultMutableTreeNode("分组列表");
 
         List<Group> groups = userInfo.getGroupList();
         for (Group group : groups) {
@@ -117,20 +125,21 @@ public class FriendsListFrame extends JFrame {
 
         // 使用根节点创建树组件
         tree = new JTree(rootNode);
-        
         // 设置树不显示根节点句柄
         tree.setShowsRootHandles(false);
-        // 设置根元素不显示
-        tree.setRootVisible(false);
-
-        // 设置树节点可编辑
-        tree.setEditable(true);
-        
+        // 设置根元素显示
+        tree.setRootVisible(true);
+        // 设置树节点不可编辑
+        tree.setEditable(false);
         // 设置节点选中监听器
         tree.addTreeSelectionListener(new TreeSelectionListener() {
             @Override
             public void valueChanged(TreeSelectionEvent e) {
-                System.out.println("当前被选中的节点: " + e.getPath());
+                if(((DefaultMutableTreeNode)tree.getLastSelectedPathComponent()).isLeaf()){
+        			tree.setComponentPopupMenu(createFriendRightKeyMenu());
+        		} else {
+        			tree.setComponentPopupMenu(createGroupRightKeyMenu());
+        		}
             }
         });
 
@@ -141,26 +150,98 @@ public class FriendsListFrame extends JFrame {
         
         add(table);
 	}
+	
+	private JPopupMenu createFriendRightKeyMenu() {
+		JPopupMenu pop = new JPopupMenu();
+		JMenuItem sendMessage = new JMenuItem("发送消息");
+		JMenuItem rename = new JMenuItem("修改备注名");
+		JMenuItem delete = new JMenuItem("删除好友");
+		pop.add(sendMessage);
+		pop.add(rename);
+		pop.add(delete);
+		
+		sendMessage.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TreePath selPath = tree.getSelectionPath();
+				if(selPath != null) {
+					openChatWindow();
+				}
+			}
+		});
+		
+		rename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TreePath selPath = tree.getSelectionPath();
+				if(selPath != null) {
+					tree.setSelectionPath(selPath);
+					DefaultMutableTreeNode nodeName = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					String newNick = JOptionPane.showInputDialog(null, "请输入新的昵称！");
+					if(newNick != null && !newNick.trim().equals("")) {
+						String s = newNick+"("+nodeName.toString().split("[(]")[1];
+						nodeName.setUserObject(s);
+						connection.send("*#UPDATE_NICK#*-" + s);
+					}
+				}
+			}
+		});
+		
+		delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
+		return pop;
+	}
+	
+	private JPopupMenu createGroupRightKeyMenu() {
+		JPopupMenu pop = new JPopupMenu();
+		JMenuItem add = new JMenuItem("添加分组");
+		JMenuItem rename = new JMenuItem("重命名");
+		JMenuItem delete = new JMenuItem("删除分组");
+		pop.add(add);
+		pop.add(rename);
+		pop.add(delete);
+		
+		rename.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				TreePath selPath = tree.getSelectionPath();
+				if(selPath != null) {
+					tree.startEditingAtPath(selPath);
+				}
+			}
+		});
+		return pop;
+	}
 
 	private void addEventHandler() {
-		tree.addMouseMotionListener(new MouseAdapter() {
+		//设置鼠标右键选中节点
+		tree.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				if(selPath != null) {
+					tree.setSelectionPath(selPath);
+				}
+			}
+		});
+		
+		//设置鼠标双击打开聊天窗口
+		tree.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int selRow = tree.getRowForLocation(e.getX(), e.getY());
-		        //TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 		        if(selRow != -1) {
-		        	DefaultMutableTreeNode selectedNode = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-		        	String account = selectedNode.getUserObject().toString();
-		        	if(account != null) {
-						if(e.getClickCount() == 2) {
-//							if(!chatRoomMap.containsKey(account)){
-//								UserInfo toUserInfo = new UserInfo(account);
-//								chatFrame = new ChatFrame(toUserInfo, userInfo, isOpenMap);
-//								chatFrame.showMe();
-//								chatRoomMap.put(account, chatFrame);
-//								isOpenMap.replace(account, true);
-//			            	 }
-						}
+		        	if(e.getClickCount() == 2) {
+		        		DefaultMutableTreeNode nodeName = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+		        		if(nodeName.isLeaf()){
+		        			friendUsername = nodeName.getUserObject().toString();
+		        			openChatWindow();
+		        		}
 		        	}
 				}
 			}
@@ -190,6 +271,6 @@ public class FriendsListFrame extends JFrame {
 	}
 	
 	public void openChatWindow() {
-		
+		new ChatFrame(socket, userInfo, friendUsername, connection);
 	}
 }

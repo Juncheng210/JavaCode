@@ -194,7 +194,7 @@ public class LoginFrame extends JFrame {
 		register.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
+				new RegisterFrame(socket, connection);
 			}
 		});
 		
@@ -225,7 +225,7 @@ public class LoginFrame extends JFrame {
 		});
 	}
 	
-	public void init() {
+	private void init() {
 		userInfo = new UserInfo();
 		try {
 			localAddress = InetAddress.getLocalHost();

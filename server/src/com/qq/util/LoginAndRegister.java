@@ -2,7 +2,9 @@ package com.qq.util;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public final class LoginAndRegister {
@@ -23,12 +25,17 @@ public final class LoginAndRegister {
 		return false;
 	}
 	
-	public static boolean registerCheck(String username, String password) {
+	public static boolean register(String username, String password) {
 		Properties pro = new Properties();
+		FileOutputStream outputFile = null;
 		try {
 			pro.load(new FileInputStream(USER_FILE_PATH));
 			if(pro.getProperty(username)==null ) {
-				pro.put(username, password);
+				pro.setProperty(username, password);
+				
+				outputFile = new FileOutputStream(USER_FILE_PATH);
+				pro.store(outputFile, "");
+	            outputFile.flush();
 				return true;
 			}
 		} catch (FileNotFoundException e) {

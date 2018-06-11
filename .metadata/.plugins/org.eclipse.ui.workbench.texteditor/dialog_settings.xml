@@ -6,27 +6,27 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Connection" key="selection"/>
+		<item value="toUserInfo" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="toUserInfo"/>
+			<item value="socket"/>
+			<item value="isOnlineMap"/>
+			<item value="isOpenMap"/>
 			<item value="connection"/>
 			<item value="userList"/>
 			<item value="userSet"/>
 			<item value="userMap"/>
 			<item value="c2s"/>
-			<item value="socket"/>
 			<item value="userCS"/>
 			<item value="1024"/>
 			<item value="hashCode("/>
 			<item value="toString"/>
 			<item value="tostring"/>
 			<item value="tostring（"/>
-			<item value="to"/>
-			<item value="MyArrayList"/>
-			<item value="set"/>
 		</list>
 		<list key="replacehistory">
 			<item value="x"/>
@@ -36,7 +36,7 @@
 		<item value="300" key="DIALOG_WIDTH"/>
 		<item value="1|微软雅黑|9.0|0|WINDOWS|1|-12|0|0|0|400|0|0|0|1|0|0|0|0|微软雅黑" key="DIALOG_FONT_NAME"/>
 		<item value="409" key="DIALOG_HEIGHT"/>
-		<item value="804" key="DIALOG_X_ORIGIN"/>
-		<item value="302" key="DIALOG_Y_ORIGIN"/>
+		<item value="1119" key="DIALOG_X_ORIGIN"/>
+		<item value="342" key="DIALOG_Y_ORIGIN"/>
 	</section>
 </section>

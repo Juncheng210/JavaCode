@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<user userneme="aaa" nickname="随缘">
-	<group name="好友">
-		<person username="111">巴黎夜雨</person>
-		<person username="222">泪痕</person>
-	</group>
-	<group name="同事">
-		<person username="333">巴黎夜雨</person>
-		<person username="444">泪痕</person>
-	</group>
+<user userneme="aaa" nickname="随缘"> 
+	<group name="好友"> 
+		<person username="111">巴黎夜雨</person>  
+		<person username="222">泪痕</person> 
+	</group>  
+	<group name="同事"> 
+		<person username="333">巴黎夜雨</person>  
+		<person username="444">殇</person> 
+	</group> 
 </user>

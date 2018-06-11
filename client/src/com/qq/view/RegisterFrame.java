@@ -29,14 +29,12 @@ import com.qq.user.UserInfo;
 
 public class RegisterFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JLabel jLabel1, jLabel2, jLabel3;
+	private JLabel jLabel1, jLabel2;
 	private JTextField accountField;//账号文本框
-	private JTextField nicknameField;//昵称文本框
 	private JPasswordField passwordField;//密码文本框
-	private JPanel jPanel1, jPanel2, jPanel3, jPanel4;
+	private JPanel jPanel1, jPanel2, jPanel3;
 	private JButton register;//登录按钮
 	
-	private String nickname;
 	private Socket socket;
 	private UserInfo userInfo;
 	private static final int SERVER_PORT = 8888;
@@ -45,16 +43,17 @@ public class RegisterFrame extends JFrame {
 	private ConnectionStream connection;
 	private String message;
 	
-	public RegisterFrame() {
-		init();
+	public RegisterFrame(Socket socket, ConnectionStream connection) {
+		this.socket = socket;
+		this.connection = connection;
 		createFrame();
 		addHandlerEvent();
 	}
-
+	
 	private void createFrame() {
 		//窗口基础操作设置
 		setTitle("注册");
-		setSize(420, 360);
+		setSize(420, 330);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -69,20 +68,14 @@ public class RegisterFrame extends JFrame {
 		//设置背景图片
 		ImageIcon backgroundImg = new ImageIcon("src/com/qq/resources/background.jpg");
 		JLabel imgLable = new JLabel(backgroundImg);
-		//设置默认头像
-		//ImageIcon iconImg = new ImageIcon("src/com/qq/resources/logo.png");
-		//iconImg.setImage(iconImg.getImage().getScaledInstance(80, 80, Image.SCALE_DEFAULT));
-		//JLabel iconImgLable = new JLabel(iconImg);
 		//操作区域
 		JPanel operLayout = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		
 		jLabel1 = new JLabel("账号");
-		jLabel2 = new JLabel("昵称");
-		jLabel3 = new JLabel("密码");
+		jLabel2 = new JLabel("密码");
 		
 		//创建账号和密码框
 		accountField = new JTextField(15);
-		nicknameField = new JTextField(15);
 		passwordField = new JPasswordField(15);
 		
 		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
@@ -94,39 +87,24 @@ public class RegisterFrame extends JFrame {
 		register.setForeground(Color.WHITE);
 		register.setPreferredSize(new Dimension(210, 30));
 		
-//		accRes.add(jLabel1);
-//		accRes.add(accountField);
-//		accRes.add(jLabel2);
-//		accRes.add(nicknameField);
-//		accRes.add(jLabel3);
-//		passRes.add(passwordField);
 		accRes.add(register);
 		
-//		accPassHintPanel.add(accRes);
-//		accPassHintPanel.add(passRes);
 		
 		jPanel1 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-		//jPanel1.add(iconImgLable);
 		jPanel1.add(jLabel1);
 		jPanel1.add(accountField);
 		
 		jPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
 		jPanel2.add(jLabel2);
-		jPanel2.add(nicknameField);
+		jPanel2.add(passwordField);
 		
-		jPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
-		jPanel3.add(jLabel3);
-		jPanel3.add(passwordField);
+		jPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+		jPanel3.add(register);
 		
-		jPanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-		jPanel4.add(register);
-		
-		//accPassHintPanel.add(jPanel2);
 		operLayout.add(jPanel);
 		operLayout.add(jPanel1);
 		operLayout.add(jPanel2);
 		operLayout.add(jPanel3);
-		operLayout.add(jPanel4);
 		add(operLayout);
 		
 		setVisible(true);
@@ -139,83 +117,15 @@ public class RegisterFrame extends JFrame {
 				if(accountField.getText().trim().equals("") || String.valueOf(passwordField.getPassword()).equals("")) {
 					return;
 				}
-				System.out.println("已开始向服务器发送登录数据...");
-				connection.send("*#LOGIN#*-" + accountField.getText().trim() + "-" + nickname + "-" + localAddress.getHostAddress()+"-" + String.valueOf(passwordField.getPassword()).trim());
-				System.out.println("等待服务器返回登录结果...");
-				//while (true) {
-					message = connection.read();
-					if ("LOGIN_FAIL".equals(message)) {
-						JOptionPane.showMessageDialog(null, "当前账号已在线，请退出后重新登录！");
-						accountField.setText("");
-						passwordField.setText("");
-					} else if ("NAME_IS_NULL".equals(message)) {
-						// setVisible(false);
-						dispose();
-						nickname = JOptionPane.showInputDialog(null, "来给自己起个名字吧");
-						try {
-							//发送：标志   IP 姓名  账号  密码
-							connection.send("*#LOGIN#*-" + InetAddress.getLocalHost().getHostAddress() + "-" + nickname + "-" + accountField.getText().trim() + "-" + String.valueOf(passwordField.getPassword()).trim());
-							userInfo.setIp(InetAddress.getLocalHost().getHostAddress());
-							//userInfo.setRecenIP(InetAddress.getLocalHost().getHostAddress());
-							//userInfo.setRecentPort(userPort);
-							System.out.println("已向服务器重新发送了信息...");
-						} catch (UnknownHostException e) {
-							e.printStackTrace();
-						}
-					} else if ("LOGIN_SUCCESSFULLY".equals(message)) {
-						setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						userInfo.setUsername(accountField.getText());
-						userInfo.setNickname(nickname);
-						//userInfo.setPort(userPort);
-						//LoginProcess loginProcess = new LoginProcess(userInfo.getUserPortraitNum());
-//						try {
-//							Thread.sleep(1000);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-						//loginProcess.dispose();
-						new FriendsListFrame((UserInfo)connection.readObject(), socket, connection);
-						RegisterFrame.this.dispose();
-//						JOptionPane.showMessageDialog(null, "登录成功！");
-					} else if("ERROR".equals(message)) {
-						JOptionPane.showMessageDialog(null, "密码错误，请重试！");
-						passwordField.setText("");
-					}
-				//}
+				connection.send("*#REGISTER#*-"+accountField.getText().trim()+"-"+String.valueOf(passwordField.getPassword()).trim());
+				message = connection.read();
+				if("REGISTER_SUCCESSFULLY".equals(message)) {
+					JOptionPane.showMessageDialog(null, "注册成功！");
+					setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+				} else if("REGISTER_FAIL".equals(message)) {
+					JOptionPane.showMessageDialog(null, "账号已存在，请重试！");
+				}
 			}
 		});
-
-		register.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
-			}
-		});
-		
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				System.exit(0);
-			}
-		});
-	}
-	
-	public void init() {
-		userInfo = new UserInfo();
-		try {
-			localAddress = InetAddress.getLocalHost();
-			socket = new Socket(localAddress, SERVER_PORT);
-			connection = new ConnectionStream(socket);
-		} catch (UnknownHostException e) {
-			System.out.println("找不到 host 的任何 IP 地址!");
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println("创建套接字时发生 I/O 错误!");
-			e.printStackTrace();
-		}
-	}
-	
-	public static void main(String[] args) {
-		new RegisterFrame();
 	}
 }

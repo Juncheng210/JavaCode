@@ -56,6 +56,15 @@ public class ServerThread implements Runnable {
 				
 				runInfo.append("已向用户 " + userInfo.getUsername() + " 发送了用户列表消息！\n");
 				break;
+			} else if(message.startsWith("*#UPDATE_NICK#*-")) {
+				MyUtils.updateFriendNickname(userInfo.getUsername(), message.substring(16, message.length()));
+			} else if(message.startsWith("*#REGISTER#*-")) {
+				if(LoginAndRegister.register(message.split("-")[1], message.split("-")[2])) {
+					MyUtils.writeUserList(message.split("-")[1]);
+					connection.send("REGISTER_SUCCESSFULLY");
+				} else {
+					connection.send("REGISTER_FAIL");
+				}
 			}
 		}
 	}
