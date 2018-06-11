@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<user userneme="bbb" nickname="海阔天空">
+	<group name="好友">
+		<person username="555">夜雨</person>
+		<person username="777">痕</person>
+	</group>
+	<group name="同事">
+		<person username="666">巴黎</person>
+		<person username="888">泪</person>
+	</group>
+</user>
