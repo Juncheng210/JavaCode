@@ -47,10 +47,6 @@ public class FriendsListFrame extends JFrame {
 	private JTree tree;
 	private UserInfo userInfo;
 	private static String friendUsername;
-	//private ChatFrame chatFrame;
-	private MyMap isOpenMap;
-	private Map<String, String> userInfoMap;
-	//private Map<String, ChatFrame> chatRoomMap = new HashMap<String, ChatFrame>();
 	private Socket socket;
 	private ConnectionStream connection;
 
@@ -62,11 +58,7 @@ public class FriendsListFrame extends JFrame {
 		addEventHandler();
 		showWindow();
 	}
-	
-	public void init() {
-		isOpenMap = new MyMap();
-	}
-	
+		
 	private void createFrame() {
 		setTitle("模拟QQ");
 		
@@ -80,7 +72,7 @@ public class FriendsListFrame extends JFrame {
 		
 		Calendar calendar = Calendar.getInstance();
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
-		JLabel userInfoLable = new JLabel(hour < 6 ? "凌晨好，" : (hour < 12 ? "上午好，" : (hour < 18 ? "下午好，" : "晚上好，")) + userInfo.getNickname());
+		JLabel userInfoLable = new JLabel(hour < 6 ? "凌晨好，" : (hour < 12 ? "上午好，" : (hour < 18 ? "下午好，" : "晚上好，")) + userInfo.getNickname()+"("+userInfo.getUsername()+")");
 		userInfoPanel.add(userInfoLable);
 		
 		SimpleDateFormat simpleDateFormat = (SimpleDateFormat) DateFormat.getInstance();
@@ -165,7 +157,7 @@ public class FriendsListFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				TreePath selPath = tree.getSelectionPath();
 				if(selPath != null) {
-					openChatWindow();
+					openChatWindow(friendUsername);
 				}
 			}
 		});
@@ -225,6 +217,8 @@ public class FriendsListFrame extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
 				if(selPath != null) {
+					DefaultMutableTreeNode nodeName = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+					friendUsername = nodeName.getUserObject().toString();
 					tree.setSelectionPath(selPath);
 				}
 			}
@@ -240,7 +234,7 @@ public class FriendsListFrame extends JFrame {
 		        		DefaultMutableTreeNode nodeName = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 		        		if(nodeName.isLeaf()){
 		        			friendUsername = nodeName.getUserObject().toString();
-		        			openChatWindow();
+		        			openChatWindow(friendUsername);
 		        		}
 		        	}
 				}
@@ -253,12 +247,8 @@ public class FriendsListFrame extends JFrame {
 				int t = JOptionPane.showConfirmDialog(null, "确认要退出客户端吗？\n温馨提示：退出会同时关闭所有聊天窗口", "确认退出", JOptionPane.OK_CANCEL_OPTION);
 				if(t == JOptionPane.OK_OPTION) {
 					connection.send("*#EXIT#*");
-					try {
-						socket.close();
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-					System.exit(0);
+					//connection.close();
+					dispose();
 				}
 			}
 		});
@@ -270,7 +260,7 @@ public class FriendsListFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 	}
 	
-	public void openChatWindow() {
+	public void openChatWindow(String friendUsername) {
 		new ChatFrame(socket, userInfo, friendUsername, connection);
 	}
 }

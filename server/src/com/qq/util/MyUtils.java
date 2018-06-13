@@ -24,7 +24,7 @@ public final class MyUtils {
 		try {
 			Document doc = sax.read("src/com/qq/resources/userlist/"+username+".xml");
 			Element user = doc.getRootElement();
-			userFriends.setUsername(user.attributeValue("username"));
+			userFriends.setUsername(username);
 			userFriends.setNickname(user.attributeValue("nickname"));
 			List<Element> groups = user.selectNodes("//user//group");
 			for (Element group : groups) {

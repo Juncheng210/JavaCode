@@ -41,6 +41,7 @@ public class ConnectionStream {
 	public void close() {
 		if (socket != null) {
 			try {
+				writer.close();
 				socket.close();
 			} catch (IOException e) {
 				e.printStackTrace();

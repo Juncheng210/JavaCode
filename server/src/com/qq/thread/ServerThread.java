@@ -1,6 +1,5 @@
 package com.qq.thread;
 
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
@@ -53,8 +52,6 @@ public class ServerThread implements Runnable {
 				runInfo.append("收到用户 " + userInfo.getUsername() + " 的退出请求...\n");
 				userMap.remove(userInfo.getUsername());
 				userSet.remove(userInfo);
-				
-				runInfo.append("已向用户 " + userInfo.getUsername() + " 发送了用户列表消息！\n");
 				break;
 			} else if(message.startsWith("*#UPDATE_NICK#*-")) {
 				MyUtils.updateFriendNickname(userInfo.getUsername(), message.substring(16, message.length()));
@@ -65,6 +62,24 @@ public class ServerThread implements Runnable {
 				} else {
 					connection.send("REGISTER_FAIL");
 				}
+			} else if(message.startsWith("*#CHAT#*-")) {
+				if(message.startsWith("*#CHAT_EXIT#*")) {
+					connection.send(message);
+				} else {
+					String[] strs = message.split("-");
+					int count = 0;
+					String friendUsername = strs[1].split("[()]")[1];
+					for(String s : userMap.keySet()) {
+						if(s.equals(friendUsername)) {
+							userMap.get(s).send(message.substring(9+friendUsername.length(), message.length()));
+							break;
+						}
+						count++;
+					}
+					if(count==userMap.size()) {
+						connection.send("FRIEND_IS_NOT_ONLINE");
+					}
+				}
 			}
 		}
 	}
@@ -74,9 +89,6 @@ public class ServerThread implements Runnable {
 		onlineUserInfo.setText("");
 		UserInfo userList = MyUtils.readUserList(userInfo.getUsername());
 		connection.sendObject(userList);
-//		for (UserInfo userInfo : userSet) {
-//			onlineUserInfo.append(str);
-//		}
 		runInfo.append("已向用户 " + userInfo.getUsername() + " 发送了用户列表消息！\n");
 		
 		printServerInfo();

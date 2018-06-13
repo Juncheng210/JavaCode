@@ -52,7 +52,6 @@ public class LoginFrame extends JFrame {
 	private String message;
 	
 	public LoginFrame() {
-		init();
 		createFrame();
 		addHandlerEvent();
 	}
@@ -145,49 +144,34 @@ public class LoginFrame extends JFrame {
 				if(accountField.getText().trim().equals("") || String.valueOf(passwordField.getPassword()).equals("")) {
 					return;
 				}
-				System.out.println("已开始向服务器发送登录数据...");
+				init();
 				connection.send("*#LOGIN#*-" + accountField.getText().trim() + "-" + nickname + "-" + localAddress.getHostAddress()+"-" + String.valueOf(passwordField.getPassword()).trim());
-				System.out.println("等待服务器返回登录结果...");
-				//while (true) {
-					message = connection.read();
-					if ("LOGIN_FAIL".equals(message)) {
-						JOptionPane.showMessageDialog(null, "当前账号已在线，请退出后重新登录！");
-						accountField.setText("");
-						passwordField.setText("");
-					} else if ("NAME_IS_NULL".equals(message)) {
-						// setVisible(false);
-						dispose();
-						nickname = JOptionPane.showInputDialog(null, "来给自己起个名字吧");
-						try {
-							//发送：标志   IP 姓名  账号  密码
-							connection.send("*#LOGIN#*-" + InetAddress.getLocalHost().getHostAddress() + "-" + nickname + "-" + accountField.getText().trim() + "-" + String.valueOf(passwordField.getPassword()).trim());
-							userInfo.setIp(InetAddress.getLocalHost().getHostAddress());
-							//userInfo.setRecenIP(InetAddress.getLocalHost().getHostAddress());
-							//userInfo.setRecentPort(userPort);
-							System.out.println("已向服务器重新发送了信息...");
-						} catch (UnknownHostException e) {
-							e.printStackTrace();
-						}
-					} else if ("LOGIN_SUCCESSFULLY".equals(message)) {
-						setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-						userInfo.setUsername(accountField.getText());
-						userInfo.setNickname(nickname);
-						//userInfo.setPort(userPort);
-						//LoginProcess loginProcess = new LoginProcess(userInfo.getUserPortraitNum());
-//						try {
-//							Thread.sleep(1000);
-//						} catch (InterruptedException e) {
-//							e.printStackTrace();
-//						}
-						//loginProcess.dispose();
-						new FriendsListFrame((UserInfo)connection.readObject(), socket, connection);
-						LoginFrame.this.dispose();
-//						JOptionPane.showMessageDialog(null, "登录成功！");
-					} else if("ERROR".equals(message)) {
-						JOptionPane.showMessageDialog(null, "密码错误，请重试！");
-						passwordField.setText("");
+				message = connection.read();
+				if ("LOGIN_FAIL".equals(message)) {
+					JOptionPane.showMessageDialog(null, "当前账号已在线，请退出后重新登录！");
+					accountField.setText("");
+					passwordField.setText("");
+				} else if ("NAME_IS_NULL".equals(message)) {
+					dispose();
+					nickname = JOptionPane.showInputDialog(null, "来给自己起个名字吧");
+					try {
+						//发送：标志   IP 昵称  账号  密码
+						connection.send("*#LOGIN#*-" + InetAddress.getLocalHost().getHostAddress() + "-" + nickname + "-" + accountField.getText().trim() + "-" + String.valueOf(passwordField.getPassword()).trim());
+						userInfo.setIp(InetAddress.getLocalHost().getHostAddress());
+						System.out.println("已向服务器重新发送了信息...");
+					} catch (UnknownHostException e) {
+						e.printStackTrace();
 					}
-				//}
+				} else if ("LOGIN_SUCCESSFULLY".equals(message)) {
+					setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+					userInfo.setUsername(accountField.getText());
+					userInfo.setNickname(nickname);
+					new FriendsListFrame((UserInfo)connection.readObject(), socket, connection);
+					LoginFrame.this.dispose();
+				} else if("ERROR".equals(message)) {
+					JOptionPane.showMessageDialog(null, "密码错误，请重试！");
+					passwordField.setText("");
+				}
 			}
 		});
 
