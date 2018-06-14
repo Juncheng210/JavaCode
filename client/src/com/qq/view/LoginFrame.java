@@ -21,7 +21,6 @@ import java.net.UnknownHostException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,7 +54,13 @@ public class LoginFrame extends JFrame {
 		createFrame();
 		addHandlerEvent();
 	}
-
+	
+	/**
+	 * @Title: createFrame  
+	 * @Description: 绘制窗口
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void createFrame() {
 		//窗口基础操作设置
 		setTitle("登录");
@@ -136,8 +141,17 @@ public class LoginFrame extends JFrame {
 		
 		setVisible(true);
 	}
-
-	private void addHandlerEvent() {		
+	
+	/**
+	 * @Title: addHandlerEvent  
+	 * @Description: 处理事件
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
+	private void addHandlerEvent() {
+		/**
+		 * 登录按钮的事件监听
+		 */
 		login.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -151,15 +165,9 @@ public class LoginFrame extends JFrame {
 					JOptionPane.showMessageDialog(null, "当前账号已在线，请退出后重新登录！");
 					accountField.setText("");
 					passwordField.setText("");
-				} else if ("NAME_IS_NULL".equals(message)) {
-					dispose();
-					nickname = JOptionPane.showInputDialog(null, "来给自己起个名字吧");
 					try {
-						//发送：标志   IP 昵称  账号  密码
-						connection.send("*#LOGIN#*-" + InetAddress.getLocalHost().getHostAddress() + "-" + nickname + "-" + accountField.getText().trim() + "-" + String.valueOf(passwordField.getPassword()).trim());
-						userInfo.setIp(InetAddress.getLocalHost().getHostAddress());
-						System.out.println("已向服务器重新发送了信息...");
-					} catch (UnknownHostException e) {
+						socket.close();
+					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else if ("LOGIN_SUCCESSFULLY".equals(message)) {
@@ -169,46 +177,67 @@ public class LoginFrame extends JFrame {
 					new FriendsListFrame((UserInfo)connection.readObject(), socket, connection);
 					LoginFrame.this.dispose();
 				} else if("ERROR".equals(message)) {
-					JOptionPane.showMessageDialog(null, "密码错误，请重试！");
+					JOptionPane.showMessageDialog(null, "账号或密码错误，请重试！");
 					passwordField.setText("");
 				}
 			}
 		});
-
+		
+		/**
+		 * 注册的事件监听
+		 */
 		register.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				init();
 				new RegisterFrame(socket, connection);
 			}
 		});
 		
+		/**
+		 * 找回密码的事件监听
+		 */
 		findPassword.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
 			}
 		});
+		/**
+		 * 记住密码的事件监听
+		 */
 		rememberPassword.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
 			}
 		});
+		/**
+		 * 自动登录的事件监听
+		 */
 		autoLogin.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JOptionPane.showMessageDialog(null, "本功能暂未开放！");
 			}
 		});
-
+		/**
+		 * 关闭窗口的事件监听
+		 */
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				System.exit(0);
+				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			}
 		});
 	}
 	
+	/**
+	 * @Title: init  
+	 * @Description: 进行初始化
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void init() {
 		userInfo = new UserInfo();
 		try {

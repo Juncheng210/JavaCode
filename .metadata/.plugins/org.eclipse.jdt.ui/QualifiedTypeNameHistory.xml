@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="com.juncheng.view.ChatFrame"/>
-<fullyQualifiedTypeName name="bean.User"/>
-<fullyQualifiedTypeName name="bean.Group"/>
-<fullyQualifiedTypeName name="org.dom4j.DocumentException"/>
-<fullyQualifiedTypeName name="org.dom4j.Document"/>
 <fullyQualifiedTypeName name="java.awt.event.MouseEvent"/>
 <fullyQualifiedTypeName name="javax.swing.JTabbedPane"/>
 <fullyQualifiedTypeName name="java.net.UnknownHostException"/>
@@ -46,11 +41,9 @@
 <fullyQualifiedTypeName name="javax.swing.JButton"/>
 <fullyQualifiedTypeName name="com.qq.view.ChatFrame"/>
 <fullyQualifiedTypeName name="java.io.InputStream"/>
-<fullyQualifiedTypeName name="java.io.FileInputStream"/>
 <fullyQualifiedTypeName name="javax.swing.JOptionPane"/>
 <fullyQualifiedTypeName name="com.qq.view.RegisterFrame"/>
 <fullyQualifiedTypeName name="org.dom4j.io.XMLWriter"/>
-<fullyQualifiedTypeName name="java.io.FileOutputStream"/>
 <fullyQualifiedTypeName name="com.qq.util.MyUtils"/>
 <fullyQualifiedTypeName name="java.text.SimpleDateFormat"/>
 <fullyQualifiedTypeName name="java.awt.event.KeyListener"/>
@@ -60,4 +53,11 @@
 <fullyQualifiedTypeName name="java.awt.Color"/>
 <fullyQualifiedTypeName name="javax.swing.JTextPane"/>
 <fullyQualifiedTypeName name="com.qq.stream.ConnectionStream"/>
+<fullyQualifiedTypeName name="java.util.concurrent.atomic.LongAccumulator"/>
+<fullyQualifiedTypeName name="java.io.File"/>
+<fullyQualifiedTypeName name="java.io.BufferedInputStream"/>
+<fullyQualifiedTypeName name="java.io.FileInputStream"/>
+<fullyQualifiedTypeName name="java.io.BufferedOutputStream"/>
+<fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+<fullyQualifiedTypeName name="javax.swing.text.DefaultEditorKit.CopyAction"/>
 </qualifiedTypeNameHistroy>

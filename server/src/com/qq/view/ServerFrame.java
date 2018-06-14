@@ -148,6 +148,7 @@ public class ServerFrame extends JFrame {
 			}
 		}
 	}
+	
 	/**
 	 * @Title: printServerInfo  
 	 * @Description: 打印服务器对应的信息

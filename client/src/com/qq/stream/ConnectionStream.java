@@ -32,7 +32,6 @@ public class ConnectionStream {
 			objectReader = new ObjectInputStream(is);
 			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			writer = new PrintWriter(socket.getOutputStream());
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

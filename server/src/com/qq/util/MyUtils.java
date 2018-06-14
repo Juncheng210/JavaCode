@@ -42,17 +42,24 @@ public final class MyUtils {
 	}
 	
 	public static void writeUserList(String username) {
+		String[] usernames = username.split("-");
+		String name = usernames[0];
+		String nick = usernames[1];
 		// 创建Document对象
         Document doc = DocumentHelper.createDocument();
         // 创建根节点
         Element user = doc.addElement("user");
-        user.addAttribute("userneme", "username");
+        user.addAttribute("userneme", name);
+        user.addAttribute("nickname", nick);
         // 创建group子节点
         Element group = user.addElement("group");
         group.addAttribute("name", "我的好友");
-        group.setText("");
+        // 创建person节点
+        Element person = group.addElement("person");
+        person.addAttribute("username", "0000");
+        person.setText("默认好友");
         
-        createXML(doc, "src/com/qq/resources/userlist/"+username+".xml");
+        createXML(doc, "src/com/qq/resources/userlist/"+name+".xml");
 	}
 	
 	public static void updateFriendNickname(String username, String message) {

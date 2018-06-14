@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<user userneme="username">
-	<group name="我的好友"></group>
+<user userneme="test" nickname="你好"> 
+	<group name="我的好友"> 
+		<person username="0000">的</person> 
+	</group> 
 </user>

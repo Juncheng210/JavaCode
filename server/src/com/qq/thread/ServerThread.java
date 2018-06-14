@@ -38,26 +38,31 @@ public class ServerThread implements Runnable {
 			if(message.startsWith("*#LOGIN#*")) {
 				userInfo.setUserInfo(message);
 				if(LoginAndRegister.loginCheck(userInfo.getUsername(), message.split("-")[4])) {
-					userMap.put(userInfo.getUsername(), connection);
-					userSet.add(userInfo);
-					connection.send("LOGIN_SUCCESSFULLY");
-					runInfo.append("用户" + userInfo.getUsername() + "登录服务器成功！\n");
-					connection.sendObject(MyUtils.readUserList(userInfo.getUsername()));
-				} else if(userMap.containsKey(userInfo.getUsername())) {
-					connection.send("LOGIN_FAIL");
+					if(userMap.containsKey(userInfo.getUsername())) {
+						connection.send("LOGIN_FAIL");
+						break;
+					} else {
+						userMap.put(userInfo.getUsername(), connection);
+						userSet.add(userInfo);
+						connection.send("LOGIN_SUCCESSFULLY");
+						runInfo.append("用户" + userInfo.getUsername() + "登录服务器成功！\n");
+						connection.sendObject(MyUtils.readUserList(userInfo.getUsername()));
+						sendUserList();
+					}
 				} else {
 					connection.send("ERROR");
 				}
-			} else if(message.startsWith("*#EXIT#*")) {
+			} else if(message.equals("*#EXIT#*")) {
 				runInfo.append("收到用户 " + userInfo.getUsername() + " 的退出请求...\n");
 				userMap.remove(userInfo.getUsername());
 				userSet.remove(userInfo);
+				printServerInfo();
 				break;
 			} else if(message.startsWith("*#UPDATE_NICK#*-")) {
 				MyUtils.updateFriendNickname(userInfo.getUsername(), message.substring(16, message.length()));
 			} else if(message.startsWith("*#REGISTER#*-")) {
-				if(LoginAndRegister.register(message.split("-")[1], message.split("-")[2])) {
-					MyUtils.writeUserList(message.split("-")[1]);
+				if(LoginAndRegister.register(message.split("-")[1], message.split("-")[3])) {
+					MyUtils.writeUserList(message.split("-")[1]+"-"+message.split("-")[2]);
 					connection.send("REGISTER_SUCCESSFULLY");
 				} else {
 					connection.send("REGISTER_FAIL");
@@ -65,6 +70,7 @@ public class ServerThread implements Runnable {
 			} else if(message.startsWith("*#CHAT#*-")) {
 				if(message.startsWith("*#CHAT_EXIT#*")) {
 					connection.send(message);
+					break;
 				} else {
 					String[] strs = message.split("-");
 					int count = 0;
@@ -84,10 +90,19 @@ public class ServerThread implements Runnable {
 		}
 	}
 	
+	/**
+	 * @Title: sendUserList  
+	 * @Description: 从文件中读取用户列表信息
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	public void sendUserList() {
 		System.out.println("正在向用户发送列表消息...");
 		onlineUserInfo.setText("");
 		UserInfo userList = MyUtils.readUserList(userInfo.getUsername());
+		for (UserInfo userInfo : userSet) {
+			onlineUserInfo.append("用户："+userInfo.getUsername()+"，IP："+userInfo.getIp()+"\n");
+		}
 		connection.sendObject(userList);
 		runInfo.append("已向用户 " + userInfo.getUsername() + " 发送了用户列表消息！\n");
 		

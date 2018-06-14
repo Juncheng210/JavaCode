@@ -29,10 +29,11 @@ import com.qq.user.UserInfo;
 
 public class RegisterFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
-	private JLabel jLabel1, jLabel2;
+	private JLabel jLabel1, jLabel2, jLabel3;
 	private JTextField accountField;//ÕËºÅÎÄ±¾¿ò
+	private JTextField nicknameField;//êÇ³ÆÎÄ±¾¿ò
 	private JPasswordField passwordField;//ÃÜÂëÎÄ±¾¿ò
-	private JPanel jPanel1, jPanel2, jPanel3;
+	private JPanel jPanel1, jPanel2, jPanel3, jPanel4;
 	private JButton register;//µÇÂ¼°´Å¥
 	
 	private Socket socket;
@@ -53,7 +54,7 @@ public class RegisterFrame extends JFrame {
 	private void createFrame() {
 		//´°¿Ú»ù´¡²Ù×÷ÉèÖÃ
 		setTitle("×¢²á");
-		setSize(420, 330);
+		setSize(420, 360);
 		setResizable(false);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -72,10 +73,12 @@ public class RegisterFrame extends JFrame {
 		JPanel operLayout = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
 		
 		jLabel1 = new JLabel("ÕËºÅ");
-		jLabel2 = new JLabel("ÃÜÂë");
+		jLabel2 = new JLabel("êÇ³Æ");
+		jLabel3 = new JLabel("ÃÜÂë");
 		
-		//´´½¨ÕËºÅºÍÃÜÂë¿ò
+		//´´½¨ÕËºÅ¡¢êÇ³ÆºÍÃÜÂë¿ò
 		accountField = new JTextField(15);
+		nicknameField = new JTextField(15);
 		passwordField = new JPasswordField(15);
 		
 		JPanel jPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
@@ -96,15 +99,20 @@ public class RegisterFrame extends JFrame {
 		
 		jPanel2 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
 		jPanel2.add(jLabel2);
-		jPanel2.add(passwordField);
+		jPanel2.add(nicknameField);
 		
-		jPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-		jPanel3.add(register);
+		jPanel3 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 5));
+		jPanel3.add(jLabel3);
+		jPanel3.add(passwordField);
+		
+		jPanel4 = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+		jPanel4.add(register);
 		
 		operLayout.add(jPanel);
 		operLayout.add(jPanel1);
 		operLayout.add(jPanel2);
 		operLayout.add(jPanel3);
+		operLayout.add(jPanel4);
 		add(operLayout);
 		
 		setVisible(true);
@@ -117,7 +125,7 @@ public class RegisterFrame extends JFrame {
 				if(accountField.getText().trim().equals("") || String.valueOf(passwordField.getPassword()).equals("")) {
 					return;
 				}
-				connection.send("*#REGISTER#*-"+accountField.getText().trim()+"-"+String.valueOf(passwordField.getPassword()).trim());
+				connection.send("*#REGISTER#*-"+accountField.getText().trim()+"-"+nicknameField.getText().trim()+"-"+String.valueOf(passwordField.getPassword()).trim());
 				message = connection.read();
 				if("REGISTER_SUCCESSFULLY".equals(message)) {
 					JOptionPane.showMessageDialog(null, "×¢²á³É¹¦£¡");

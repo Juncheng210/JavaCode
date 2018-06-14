@@ -12,7 +12,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -40,7 +39,6 @@ import javax.swing.tree.TreePath;
 import com.qq.stream.ConnectionStream;
 import com.qq.user.Group;
 import com.qq.user.UserInfo;
-import com.qq.util.MyMap;
 
 public class FriendsListFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -81,7 +79,7 @@ public class FriendsListFrame extends JFrame {
 		userInfoPanel.add(userTimeLable);
 		
 		northPanel.add(userInfoPanel);
-		centerPanel.add(new JLabel("在线用户列表："), BorderLayout.CENTER);
+		//centerPanel.add(new JLabel("在线用户列表："), BorderLayout.CENTER);
 		add(northPanel, BorderLayout.NORTH);
 		add(centerPanel, BorderLayout.CENTER);
 		
@@ -119,8 +117,8 @@ public class FriendsListFrame extends JFrame {
         tree = new JTree(rootNode);
         // 设置树不显示根节点句柄
         tree.setShowsRootHandles(false);
-        // 设置根元素显示
-        tree.setRootVisible(true);
+        // 设置根元素不显示
+        tree.setRootVisible(false);
         // 设置树节点不可编辑
         tree.setEditable(false);
         // 设置节点选中监听器
@@ -143,6 +141,12 @@ public class FriendsListFrame extends JFrame {
         add(table);
 	}
 	
+	/**
+	 * @Title: createFriendRightKeyMenu  
+	 * @Description: 创建好友列表的右键菜单
+	 * @param @return    参数  
+	 * @return JPopupMenu    返回类型
+	 */
 	private JPopupMenu createFriendRightKeyMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		JMenuItem sendMessage = new JMenuItem("发送消息");
@@ -152,6 +156,9 @@ public class FriendsListFrame extends JFrame {
 		pop.add(rename);
 		pop.add(delete);
 		
+		/**
+		 * 打开聊天窗口
+		 */
 		sendMessage.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -162,6 +169,9 @@ public class FriendsListFrame extends JFrame {
 			}
 		});
 		
+		/**
+		 * 重命名好友备注
+		 */
 		rename.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -179,6 +189,9 @@ public class FriendsListFrame extends JFrame {
 			}
 		});
 		
+		/**
+		 * 删除好友
+		 */
 		delete.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -189,6 +202,12 @@ public class FriendsListFrame extends JFrame {
 		return pop;
 	}
 	
+	/**
+	 * @Title: createGroupRightKeyMenu  
+	 * @Description: 创建分组的右键菜单
+	 * @param @return    参数  
+	 * @return JPopupMenu    返回类型
+	 */
 	private JPopupMenu createGroupRightKeyMenu() {
 		JPopupMenu pop = new JPopupMenu();
 		JMenuItem add = new JMenuItem("添加分组");
@@ -198,6 +217,18 @@ public class FriendsListFrame extends JFrame {
 		pop.add(rename);
 		pop.add(delete);
 		
+		/**
+		 * 添加分组
+		 */
+		add.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		/**
+		 * 重命名分组
+		 */
 		rename.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -207,6 +238,17 @@ public class FriendsListFrame extends JFrame {
 				}
 			}
 		});
+		
+		/**
+		 * 删除分组
+		 */
+		delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		
 		return pop;
 	}
 
@@ -241,14 +283,17 @@ public class FriendsListFrame extends JFrame {
 			}
 		});
 		
+		/**
+		 * 关闭窗口
+		 */
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				int t = JOptionPane.showConfirmDialog(null, "确认要退出客户端吗？\n温馨提示：退出会同时关闭所有聊天窗口", "确认退出", JOptionPane.OK_CANCEL_OPTION);
 				if(t == JOptionPane.OK_OPTION) {
 					connection.send("*#EXIT#*");
-					//connection.close();
-					dispose();
+					connection.close();
+					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				}
 			}
 		});

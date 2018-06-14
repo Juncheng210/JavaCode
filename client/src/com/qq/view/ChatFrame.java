@@ -5,12 +5,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
 
 import com.qq.stream.ConnectionStream;
 import com.qq.user.UserInfo;
@@ -34,7 +29,6 @@ public class ChatFrame extends JFrame {
 	
 	private Socket socket;
 	private String friendUsername;
-	private String username;
 	private UserInfo userInfo;
 	private ConnectionStream connection;
 	
@@ -69,6 +63,12 @@ public class ChatFrame extends JFrame {
 		}).start();
 	}
 	
+	/**
+	 * @Title: createFrame  
+	 * @Description: 绘制窗口
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void createFrame() {
 		setTitle("正在与"+friendUsername+"聊天...");
 		setLayout(null);
@@ -120,6 +120,12 @@ public class ChatFrame extends JFrame {
 		setVisible(true);
 	}
 	
+	/**
+	 * @Title: addEventHandler  
+	 * @Description: 此方法用来监听事件
+	 * @param     参数  
+	 * @return void    返回类型
+	 */
 	private void addEventHandler() {
 		//发送按钮的事件
 		send.addActionListener(new ActionListener() {
@@ -152,7 +158,7 @@ public class ChatFrame extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				connection.send("*#CHAT_EXIT#*");
-				e.getWindow().dispose();
+				dispose();
 			}
 		});
 	}
