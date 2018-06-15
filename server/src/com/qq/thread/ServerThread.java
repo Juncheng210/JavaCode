@@ -77,12 +77,14 @@ public class ServerThread implements Runnable {
 					String friendUsername = strs[1].split("[()]")[1];
 					for(String s : userMap.keySet()) {
 						if(s.equals(friendUsername)) {
-							userMap.get(s).send(message.substring(9+friendUsername.length(), message.length()));
+							System.out.println(message);
+							userMap.get(s).send(message.substring(9+strs[1].length()+1, message.length()));
 							break;
 						}
 						count++;
 					}
 					if(count==userMap.size()) {
+						System.out.println("FRIEND_IS_NOT_ONLINE");
 						connection.send("FRIEND_IS_NOT_ONLINE");
 					}
 				}

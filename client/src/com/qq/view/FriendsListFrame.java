@@ -47,7 +47,7 @@ public class FriendsListFrame extends JFrame {
 	private static String friendUsername;
 	private Socket socket;
 	private ConnectionStream connection;
-
+	
 	public FriendsListFrame(UserInfo userInfo, Socket socket, ConnectionStream connection) {
 		this.userInfo = userInfo;
 		this.socket = socket;
@@ -289,8 +289,8 @@ public class FriendsListFrame extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				int t = JOptionPane.showConfirmDialog(null, "确认要退出客户端吗？\n温馨提示：退出会同时关闭所有聊天窗口", "确认退出", JOptionPane.OK_CANCEL_OPTION);
-				if(t == JOptionPane.OK_OPTION) {
+				int confirm = JOptionPane.showConfirmDialog(null, "确认要退出客户端吗？\n温馨提示：退出会同时关闭所有聊天窗口", "确认退出", JOptionPane.OK_CANCEL_OPTION);
+				if(confirm == JOptionPane.OK_OPTION) {
 					connection.send("*#EXIT#*");
 					connection.close();
 					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

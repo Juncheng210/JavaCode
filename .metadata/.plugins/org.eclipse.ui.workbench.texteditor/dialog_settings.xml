@@ -6,12 +6,13 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="sendUserList" key="selection"/>
+		<item value="friendUsername" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="friendUsername"/>
 			<item value="sendUserList"/>
 			<item value="socket"/>
 			<item value="port"/>
@@ -24,7 +25,6 @@
 			<item value="userInfoMap"/>
 			<item value="connection"/>
 			<item value="readMessagehread"/>
-			<item value="friendUsername"/>
 			<item value="toUserInfo"/>
 			<item value="isOnlineMap"/>
 		</list>

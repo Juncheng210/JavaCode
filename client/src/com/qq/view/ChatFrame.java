@@ -52,11 +52,12 @@ public class ChatFrame extends JFrame {
 					if(str.startsWith("*#CHAT_EXIT#*")) {
 						break;
 					}
+					System.out.println(str);
 					if(str.equals("FRIEND_IS_NOT_ONLINE")) {
 						JOptionPane.showMessageDialog(null, "对方当前不在线！");
 					} else {
 						String[] strs = str.replaceAll("\\*##\\*", "\n").split("-");
-						messageArea.append(strs[1]+" "+strs[2]+"\n"+strs[3]);
+						messageArea.append(strs[0]+"  "+strs[1]+"\n"+strs[2]);
 					}
 				}
 			}
